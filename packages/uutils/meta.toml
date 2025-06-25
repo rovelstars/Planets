@@ -1,0 +1,7 @@
+name="uutils"
+version="0.1.0"
+description="Cross-platform Rust rewrite of the GNU coreutils"
+license="MIT"
+repository="https://github.com/uutils/coreutils"
+
+ship="/output/uutils.tar.gz"
