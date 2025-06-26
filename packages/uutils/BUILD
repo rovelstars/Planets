@@ -5,7 +5,7 @@ FROM rust:alpine
 
 # Install build dependencies and git
 RUN apk update && \
-  apk add --no-cache build-base git
+  apk add --no-cache build-base git clang libselinux
 
 # Clone the repository at the specified version (branch/tag)
 RUN git clone {{repository}} --branch {{version}} --depth 1 /{{name}}
