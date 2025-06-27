@@ -1,11 +1,11 @@
-# Use the official Rust image based on Alpine
-FROM rust:alpine
+# Use the official Rust image
+FROM rust:latest
 
 # Set environment variables for metadata (optional, for documentation)
 
 # Install build dependencies and git
-RUN apk update && \
-  apk add --no-cache build-base git clang libselinux
+RUN apt update && \
+  apt install -y clang
 
 # Clone the repository at the specified version (branch/tag)
 RUN git clone {{repository}} --branch {{version}} --depth 1 /{{name}}
@@ -14,12 +14,13 @@ RUN git clone {{repository}} --branch {{version}} --depth 1 /{{name}}
 WORKDIR /{{name}}
 
 # Build the project
-RUN cargo build --release
+RUN make PROFILE=release
 
+# Install the built binary to the target directory
+RUN mkdir -p /output
+RUN make PREFIX=/output/build install
 # Export the built binaries to tar.gz
-RUN mkdir -p /output && \
-  cp target/release/{{name}} /output/ && \
-  tar -czf /output/{{name}}.tar.gz -C /output {{name}}
+RUN tar -czf /output/{{name}}-{{version}}.tar.gz -C /output/build .
 
-# Allow the output directory to be exported to host
-VOLUME ["/output"]
+# Create a share directory for output to be moved to during docker run.
+VOLUME ["/share"]
