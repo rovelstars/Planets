@@ -1,7 +1,8 @@
-name="uutils"
-version="0.1.0"
-description="Cross-platform Rust rewrite of the GNU coreutils"
-license="MIT"
-repository="https://github.com/uutils/coreutils"
+name = "uutils"
+version = "0.1.0"
+description = "Cross-platform Rust rewrite of the GNU coreutils"
+licenses = ["MIT"]
+repository = "https://github.com/uutils/coreutils"
 
-ship="/output/uutils.tar.gz"
+# Remove the below line and the patch won't apply
+custom_uname_o = "true"

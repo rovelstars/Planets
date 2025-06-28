@@ -1,9 +1,9 @@
-name="linux"
+name = "linux"
 version = "6.15.3"
 
 description = "The Linux kernel is a free and open-source, monolithic, Unix-like operating system kernel."
-license = "GPL-2.0 WITH Linux-syscall-note"
 homepage = "https://www.kernel.org/"
+licenses = "GPL-2.0 WITH Linux-syscall-note"
 repository = "https://github.com/torvalds/linux"
 source = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.15.3.tar.xz"
 
