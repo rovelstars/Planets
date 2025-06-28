@@ -1,0 +1,11 @@
+--- src/uu/uname/src/uname.rs	2025-06-28 18:01:27.926869067 +0000
++++ modified.rs	2025-06-28 18:22:42.625709567 +0000
+@@ -88,7 +88,7 @@
+         let machine =
+             (opts.machine || opts.all).then(|| uname.machine().to_string_lossy().to_string());
+ 
+-        let os = (opts.os || opts.all).then(|| uname.osname().to_string_lossy().to_string());
++        let os = (opts.os || opts.all).then(|| "RovelOS".to_string());
+ 
+         // This option is unsupported on modern Linux systems
+         // See: https://lists.gnu.org/archive/html/bug-coreutils/2005-09/msg00063.html
