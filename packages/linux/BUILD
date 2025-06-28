@@ -31,10 +31,10 @@ RUN wget -qO- {{source}} | tar -Jx --strip-components=1 -C /{{name}}
 
 WORKDIR /{{name}}
 
+ENV KBUILD_BUILD_HOST="{{build_host}}"
+ENV KBUILD_BUILD_USER="{{build_user}}"
+
 # Set up a default kernel configuration.
-# For simplicity, we'll use defconfig for your host architecture.
-# For a custom kernel, you'd usually run `make menuconfig` interactively.
-# Or copy a pre-existing .config file.
 RUN make defconfig
 
 # You can modify .config here if needed. For example:
@@ -44,27 +44,11 @@ RUN make defconfig
 # Use -j$(nproc) to leverage all available CPU cores in the container
 RUN make -j$(nproc) bzImage modules
 
-# Create a temporary directory for installing modules and headers
-RUN mkdir -p /tmp/kernel-install
-ENV INSTALL_PATH="/tmp/kernel-install"
-ENV KBUILD_BUILD_HOST="{{build_host}}"
-ENV KBUILD_BUILD_USER="{{build_user}}"
+RUN make install INSTALL_PATH=/output/kernel
+RUN make modules_install INSTALL_MOD_PATH=/output/modules
 
-# Install modules to the temporary path
-# Modules will be in /output/modules
-RUN make modules_install INSTALL_MOD_PATH="/output/modules"
-
-# Install the kernel image (bzImage) and System.map
-RUN make install INSTALL_PATH="/output/kernel"
-
-# Generate the initial RAM filesystem (initrd.img)
-RUN update-initramfs -c -k "{{version}}" -b "/output/initramfs"
-
-# Copy the compiled kernel image and initramfs to the /output volume
-RUN cp "/{{name}}/boot/vmlinuz-{{version}}" "/output/" && \
-  cp "/{{name}}/boot/initrd.img-{{version}}" "/output/" && \
-  cp "/{{name}}/boot/System.map-{{version}}" "/output/" && \
-  cp "/{{name}}/boot/config-{{version}}" "/output/"
+# Archive the output files from /output/kernel and /output/modules to a tarball present in /output
+RUN tar -czf /output/{{name}}-{{version}}.tar.gz -C /output kernel modules
 
 # Create a share directory for output to be moved to during docker run.
 VOLUME ["/share"]
