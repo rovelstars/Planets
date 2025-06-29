@@ -50,5 +50,9 @@ RUN make modules_install INSTALL_MOD_PATH=/output/modules
 # Archive the output files from /output/kernel and /output/modules to a tarball present in /output
 RUN tar -czf /output/{{name}}-{{version}}.tar.gz -C /output kernel modules
 
+# Copy License to /LICENSES
+RUN mkdir -p /LICENSES && \
+  cp -r /{{name}}/COPYING* /LICENSES/
+
 # Create a share directory for output to be moved to during docker run.
 VOLUME ["/share"]

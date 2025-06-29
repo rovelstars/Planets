@@ -1,0 +1,11 @@
+name = "glibc"
+version = "2.41"
+description = "GNU C Library"
+licenses = ["GPL-2.0","LGPL-2.1","GCC RUNTIME LIBRARY EXCEPTION"]
+repository = "https://sourceware.org/git/glibc"
+
+branch="glibc-2.41"
+
+# ROVELOS CHANGES
+
+minimum_kernel_version = "6.1.140"
