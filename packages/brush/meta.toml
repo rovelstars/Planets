@@ -1,0 +1,6 @@
+name = "brush"
+version = "0.2.19"
+licenses = ["MIT"]
+description = "🐚bash/POSIX-compatible shell implemented in Rust 🦀"
+repository = "https://github.com/reubeno/brush"
+branch = "brush-shell-v0.2.19"
