@@ -1,0 +1,5 @@
+name = "nushell"
+version = "0.105.1"
+description = "A new type of shell"
+licenses = ["MIT"]
+repository = "https://github.com/nushell/nushell.git"

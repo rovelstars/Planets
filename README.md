@@ -1,4 +1,4 @@
-# Planets
+# Planets 🪐
 
 This repository contains a collection of "planets" (packages that are built inside containers using Docker) for our OS. We have the right to decide which planets to include in our OS, and we will not include planets that are not useful or do not meet our standards. Other planets can be installed manually by users, but they will not be included in the official OS build. More info about such "third party planets" will be available in the future.
 Example of creating a new planet.
