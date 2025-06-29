@@ -16,10 +16,6 @@ RUN apt-get update && \
     python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables
-ENV PREFIX=/output/{{name}}
-ENV MAKEFLAGS=-j$(nproc)
-
 RUN git clone --depth 1 --branch {{branch}} {{repository}} /{{name}} 
 
 WORKDIR /{{name}}
@@ -28,17 +24,19 @@ WORKDIR /{{name}}
 RUN ./contrib/download_prerequisites
 
 # Build and install
-RUN mkdir /tmp/build && cd /tmp/build && \
-  /{{name}}/configure --prefix=$PREFIX --disable-multilib --enable-languages=c,c++ && \
-  make && \
-  make install
+RUN mkdir /tmp/build && cd /tmp/build
+RUN /{{name}}/configure --prefix=/output/{{name}} --disable-multilib --enable-languages=c,c++
+# Limit the number of jobs to half the number of available processors
+# to avoid overwhelming the system and ensure a smoother build process
+RUN make -j$(nproc --all) -l $(nproc --all)/2
+RUN make install
 
 # Compress the output
 RUN cd /output && \
-  tar -czf {{NAME}}-{{VERSION}}.tar.gz -C gcc .
+  tar -czf {{name}}-{{version}}.tar.gz -C gcc .
 
 # Copy all licenses inside gcc source to /LICENSES
 RUN mkdir -p /LICENSES && \
-  cp -r /{{name}}/COPYING* /{{name}}/COPYING3* /{{name}}/COPYING.RUNTIME* /{{name}}/COPYING.RUNTIME.GPL3* /{{name}}/COPYING.RUNTIME.LGPL3* /LICENSES/
+  cp -r /{{name}}/COPYING* /LICENSES/
 
 VOLUME ["/share"]
