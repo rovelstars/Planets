@@ -3,3 +3,6 @@ version = "0.105.1"
 description = "A new type of shell"
 licenses = ["MIT"]
 repository = "https://github.com/nushell/nushell.git"
+
+# Remove the below line and the patch won't apply
+custom_uname_o = "true"

@@ -1,0 +1,5 @@
+name = "findutils"
+version = "0.8.0"
+description = "Rust implementation of findutils"
+licenses = ["MIT"]
+repository = "https://github.com/uutils/findutils"

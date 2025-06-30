@@ -1,4 +1,4 @@
-name = "uutils"
+name = "coreutils"
 version = "0.1.0"
 description = "Cross-platform Rust rewrite of the GNU coreutils"
 licenses = ["MIT"]
