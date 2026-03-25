@@ -97,10 +97,24 @@ install() {
         cp "$SYSROOT/Core/LibKit/libc.rdl" "$ROOT/Core/LibKit/libc.rdl"
     fi
 
-    # Create a basic /Core/Bin/sh symlink to busybox or host shell
-    # For now, create a wrapper that uses the dynamic linker
-    if [ ! -f "$ROOT/Core/Bin/sh" ]; then
-        echo ">>> Note: No shell in base image. Use 'rocket enter' with host fallback."
+    echo ">>> Copying shell and utilities"
+    # Copy brush (POSIX shell) and other built packages from Rocket output
+    ROCKET_OUT="${ROCKET_OUTPUT:-$(dirname "$SYSROOT")/Rocket/output}"
+    if [ -d "$ROCKET_OUT/brush/Core/Bin" ]; then
+        cp -a "$ROCKET_OUT/brush/Core/Bin"/* "$ROOT/Core/Bin/" 2>/dev/null
+        echo "    brush shell installed (sh → brush)"
+    else
+        echo "    Warning: brush not found at $ROCKET_OUT/brush — no shell in base image"
+    fi
+    # Copy findutils if available
+    if [ -d "$ROCKET_OUT/findutils/Core/Bin" ]; then
+        cp -a "$ROCKET_OUT/findutils/Core/Bin"/* "$ROOT/Core/Bin/" 2>/dev/null
+        echo "    findutils installed (find, xargs)"
+    fi
+    # Copy coreutils if available
+    if [ -d "$ROCKET_OUT/coreutils/Core/Bin" ]; then
+        cp -a "$ROCKET_OUT/coreutils/Core/Bin"/* "$ROOT/Core/Bin/" 2>/dev/null
+        echo "    coreutils installed"
     fi
 
     echo ">>> Base image assembled at $ROOT"
