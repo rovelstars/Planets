@@ -1,10 +1,18 @@
 #!/bin/bash
 # Build script for brush shell (RunixOS)
+# Uses our fork with all RunixOS dependencies pre-patched.
+
+TARGET_ARGS=""
+if [ -n "$RUNIXOS_TARGET" ]; then
+    TARGET_ARGS="--target $RUNIXOS_TARGET"
+    export RUSTC="$RUNIXOS_RUSTC"
+    export CARGO_TARGET_X86_64_ROVELSTARS_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-runixos"
+fi
 
 configure() {
     cd "$SRC"
     if [ ! -d "brush" ]; then
-        git clone "$REPOSITORY" --branch "${BRANCH:-brush-shell-v$VERSION}" --depth 1 brush
+        git clone "$REPOSITORY" --branch "${BRANCH:-runixos}" --depth 1 brush
     fi
     cd brush
 
@@ -18,17 +26,16 @@ configure() {
 
 build() {
     cd "$SRC/brush"
-    # Allow warnings — upstream sometimes has unused imports with newer Rust
-    RUSTFLAGS="--cap-lints warn" cargo build --release -p brush-shell -j"$JOBS"
+    cargo build --release $TARGET_ARGS -p brush-shell -j"$JOBS"
 }
 
 install() {
     cd "$SRC/brush"
-    RUSTFLAGS="--cap-lints warn" cargo install --path brush-shell --root "$OUTPUT/Core"
-    rm -rf "$OUTPUT/Core/.crates"*
-    # cargo installs to Core/bin (lowercase) — move to Core/Bin
-    if [ -d "$OUTPUT/Core/bin" ] && [ ! -d "$OUTPUT/Core/Bin" ]; then
-        mv "$OUTPUT/Core/bin" "$OUTPUT/Core/Bin"
+    mkdir -p "$OUTPUT/Core/Bin"
+    if [ -n "$RUNIXOS_TARGET" ]; then
+        cp target/$RUNIXOS_TARGET/release/brush "$OUTPUT/Core/Bin/"
+    else
+        cp target/release/brush "$OUTPUT/Core/Bin/"
     fi
     # Create sh symlink for POSIX compatibility
     ln -sf brush "$OUTPUT/Core/Bin/sh"
