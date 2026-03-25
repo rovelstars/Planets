@@ -24,4 +24,8 @@ install() {
     cargo install --path . --root "$OUTPUT/Core"
     # Clean cargo metadata
     rm -rf "$OUTPUT/Core/.crates"*
+    # cargo installs to Core/bin (lowercase) — move to Core/Bin
+    if [ -d "$OUTPUT/Core/bin" ] && [ ! -d "$OUTPUT/Core/Bin" ]; then
+        mv "$OUTPUT/Core/bin" "$OUTPUT/Core/Bin"
+    fi
 }
