@@ -1,5 +1,6 @@
 name = "findutils"
 version = "0.8.0"
-description = "Rust implementation of findutils"
+description = "Rust implementation of findutils - RunixOS fork"
 licenses = ["MIT"]
-repository = "https://github.com/uutils/findutils"
+repository = "https://github.com/renhiyama/findutils"
+branch = "main"
