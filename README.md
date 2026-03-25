@@ -52,7 +52,7 @@ branch = "" # (optional) branch of the repository to manually choose, incase the
 ## Contributing
 
 If you want to contribute a new planet, please follow the structure above. The `meta.toml` file should contain metadata about the planet, and the `BUILD` (essentially a Dockerfile with some slight modifications) should define how to build the planet.
-Include any patches in the `patches` directory, if necessary.
+Include any patches/configs in the `patches` directory, if necessary.
 Provide a `TIP.md` file with tips or additional information about the planet, if needed. This can be helpful for users who want to understand how to use or modify the planet. Simple projects may not need a `TIP.md` file, but it can be useful for more complex setups (like explaining why some specific patches are needed, and/or why to build with some specific build options).
 
 Prefer linking to the upstream git repository in the `meta.toml` file, as long as its resonable to maintain with some patches. If the upstream repository is not maintained anymore, you can fork it and maintain your own version, but please make sure to document this in the `meta.toml` file (e.g., `original_repo_url` field).

@@ -19,13 +19,14 @@ RUN apt-get update && \
 
 RUN git clone --depth 1 --branch {{branch}} {{repository}} /{{name}} 
 
-WORKDIR /{{name}}
+# Copy /patches/configparms to /{{name}}/configparms
+COPY /patches/configparms /{{name}}/configparms
 ENV PREFIX=/output/{{name}}
 
 # Compile in /tmp/build
 RUN mkdir -p /tmp/build
 WORKDIR /tmp/build
-RUN /{{name}}/configure --prefix=$PREFIX/usr \
+RUN /{{name}}/configure --prefix="" \
       #--with-headers=$PREFIX/usr/include \ ---- TODO: look into this line, modify it to use the correct headers when we use custom Docker image base - based on our OS' rootfs.
       --with-bugurl=https://github.com/rovelstars/Planets/issues/new?title=BUG%3A%20glibc%20-%20 \
       --enable-bind-now \
@@ -39,7 +40,7 @@ RUN /{{name}}/configure --prefix=$PREFIX/usr \
 
 RUN make -j$(nproc --all) -l $(nproc --all)/2
 
-RUN make install
+RUN make install_root=/output/{{name}} install
 
 # Compress the output
 RUN cd /output && \
