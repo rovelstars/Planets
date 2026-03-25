@@ -97,25 +97,15 @@ install() {
         cp "$SYSROOT/Core/LibKit/libc.rdl" "$ROOT/Core/LibKit/libc.rdl"
     fi
 
-    echo ">>> Copying shell and utilities"
-    # Copy brush (POSIX shell) and other built packages from Rocket output
-    ROCKET_OUT="${ROCKET_OUTPUT:-$(dirname "$SYSROOT")/Rocket/output}"
-    if [ -d "$ROCKET_OUT/brush/Core/Bin" ]; then
-        cp -a "$ROCKET_OUT/brush/Core/Bin"/* "$ROOT/Core/Bin/" 2>/dev/null
-        echo "    brush shell installed (sh → brush)"
-    else
-        echo "    Warning: brush not found at $ROCKET_OUT/brush — no shell in base image"
-    fi
-    # Copy findutils if available
-    if [ -d "$ROCKET_OUT/findutils/Core/Bin" ]; then
-        cp -a "$ROCKET_OUT/findutils/Core/Bin"/* "$ROOT/Core/Bin/" 2>/dev/null
-        echo "    findutils installed (find, xargs)"
-    fi
-    # Copy coreutils if available
-    if [ -d "$ROCKET_OUT/coreutils/Core/Bin" ]; then
-        cp -a "$ROCKET_OUT/coreutils/Core/Bin"/* "$ROOT/Core/Bin/" 2>/dev/null
-        echo "    coreutils installed"
-    fi
+    echo ">>> Copying userland utilities from Rocket output"
+    # ROCKET_OUTPUT is the host directory where Rocket stores per-package outputs
+    for pkg in brush findutils coreutils nushell; do
+        pkg_bin="$ROCKET_OUTPUT/$pkg/Core/Bin"
+        if [ -d "$pkg_bin" ]; then
+            cp -a "$pkg_bin"/* "$ROOT/Core/Bin/" 2>/dev/null
+            echo "    $pkg installed"
+        fi
+    done
 
     echo ">>> Base image assembled at $ROOT"
     echo "    Directories: $(find "$ROOT" -type d | wc -l)"
