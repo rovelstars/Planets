@@ -1,0 +1,7 @@
+name = "base-image"
+version = "0.1.0"
+description = "RunixOS minimal dev environment base image"
+licenses = ["MIT"]
+
+# This is a meta-package that assembles the base image from other packages.
+# It doesn't build from source — it copies pre-built outputs into a rootfs.
