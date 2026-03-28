@@ -1,0 +1,5 @@
+name = "nghttp2"
+version = "1.65.0"
+description = "HTTP/2 C library and tools"
+licenses = ["MIT"]
+repository = "https://github.com/nghttp2/nghttp2"

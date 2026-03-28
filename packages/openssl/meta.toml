@@ -1,0 +1,5 @@
+name = "openssl"
+version = "3.5.0"
+description = "TLS/SSL and general-purpose cryptography library"
+licenses = ["Apache-2.0"]
+repository = "https://github.com/openssl/openssl"

@@ -1,0 +1,5 @@
+name = "git"
+version = "2.49.0"
+description = "Distributed version control system"
+licenses = ["GPL-2.0"]
+repository = "https://github.com/git/git"
