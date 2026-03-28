@@ -1,0 +1,5 @@
+name = "curl"
+version = "8.13.0"
+description = "Command line tool and library for transferring data with URLs"
+licenses = ["curl"]
+repository = "https://github.com/curl/curl"
