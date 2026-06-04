@@ -16,6 +16,12 @@ configure() {
     export CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT"
     export AR="$SYSROOT/Core/Bin/llvm-ar"
     export RANLIB="$SYSROOT/Core/Bin/llvm-ranlib"
+    # Point CXX at the cross compiler (targeting RunixOS), not the host one
+    # Rocket injects. There is no C++ stdlib for the target yet (libc++ is a
+    # post-glibc runtime), so glibc's C++ link test fails and it disables the
+    # C++ test helpers. If CXX is left unset, configure finds the host g++,
+    # decides C++ works, then fails building the target helper with -lstdc++.
+    export CXX="$SYSROOT/Core/Bin/clang++ --target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT"
 
     # glibc must be built out-of-tree
     mkdir -p glibc-build && cd glibc-build
