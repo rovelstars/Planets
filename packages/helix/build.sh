@@ -5,11 +5,11 @@ TARGET_ARGS=""
 if [ -n "$RUNIXOS_TARGET" ]; then
     TARGET_ARGS="--target $RUNIXOS_TARGET"
     export RUSTC="$RUNIXOS_RUSTC"
-    export CARGO_TARGET_X86_64_ROVELSTARS_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-runixos --cfg getrandom_backend=\"linux_getrandom\""
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-linux-runixos --cfg getrandom_backend=\"linux_getrandom\""
     export CC="$SYSROOT/Core/Bin/clang"
     export CXX="$SYSROOT/Core/Bin/clang++"
-    export CFLAGS="--target=x86_64-rovelstars-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
-    export CFLAGS_x86_64_rovelstars_runixos="--target=x86_64-rovelstars-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
+    export CFLAGS="--target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
+    export CFLAGS_x86_64_rovelstars_linux_runixos="--target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
 fi
 
 configure() {

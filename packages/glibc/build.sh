@@ -3,9 +3,19 @@
 
 configure() {
     cd "$SRC"
-    if [ ! -d "glibc" ]; then
+    # $LOCAL_SRC (set by `rocket build glibc --local ../glibc`) builds the local
+    # working tree instead of cloning upstream.
+    if [ -n "$LOCAL_SRC" ]; then
+        ln -sfn "$LOCAL_SRC" glibc
+    elif [ ! -d "glibc" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-glibc-$VERSION}" --depth 1 glibc
     fi
+
+    # Cross-compile to RunixOS with our clang. glibc reads CC/AR/RANLIB from the
+    # environment, and Rocket's plain $CC has no --target, so set it here.
+    export CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT"
+    export AR="$SYSROOT/Core/Bin/llvm-ar"
+    export RANLIB="$SYSROOT/Core/Bin/llvm-ranlib"
 
     # glibc must be built out-of-tree
     mkdir -p glibc-build && cd glibc-build
@@ -20,7 +30,7 @@ configure() {
         --datarootdir=/Core/StoreRoom \
         --sysconfdir=/Core/Config \
         --localstatedir=/Vault/State \
-        --host=x86_64-rovelstars-runixos \
+        --host=x86_64-rovelstars-linux-runixos \
         --build=$(gcc -dumpmachine) \
         --with-headers=/Core/APIHeader \
         --enable-shared \

@@ -2,7 +2,7 @@
 # Build script for git (RunixOS cross-compilation)
 # Depends on: zlib, openssl, curl, expat
 
-CROSS_CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-runixos --sysroot=$SYSROOT -fuse-ld=lld"
+CROSS_CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT -fuse-ld=lld"
 
 GIT_MAKE_ARGS=(
     CC="$CROSS_CC"

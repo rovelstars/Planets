@@ -2,8 +2,24 @@
 # Build script for LLVM/Clang/LLD (RunixOS)
 
 configure() {
+    # Build LLVM with the host toolchain, not the RunixOS cross-compiler that
+    # Rocket injects. LLVM builds its own host tools (tblgen) during the build,
+    # and those have to run on the build machine. The clang we produce still
+    # defaults to the RunixOS target via the cmake cache. Without this, the host
+    # tools get the RunixOS interpreter and fail to start.
+    export CC=/usr/bin/clang
+    export CXX=/usr/bin/clang++
+    export AR=/usr/bin/ar
+    export RANLIB=/usr/bin/ranlib
+    export PATH=/usr/bin:/bin
+    unset LD_LIBRARY_PATH
+
     cd "$SRC"
-    if [ ! -d "llvm-project" ]; then
+    # $LOCAL_SRC (set by `rocket build llvm --local ../llvm-project`) builds the
+    # local working tree instead of cloning upstream.
+    if [ -n "$LOCAL_SRC" ]; then
+        ln -sfn "$LOCAL_SRC" llvm-project
+    elif [ ! -d "llvm-project" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-llvmorg-$VERSION}" --depth 1 llvm-project
     fi
 

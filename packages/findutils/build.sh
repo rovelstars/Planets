@@ -6,7 +6,7 @@ TARGET_ARGS=""
 if [ -n "$RUNIXOS_TARGET" ]; then
     TARGET_ARGS="--target $RUNIXOS_TARGET"
     export RUSTC="$RUNIXOS_RUSTC"
-    export CARGO_TARGET_X86_64_ROVELSTARS_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-runixos"
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-linux-runixos"
 fi
 
 configure() {

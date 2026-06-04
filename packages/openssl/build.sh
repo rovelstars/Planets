@@ -9,7 +9,7 @@ configure() {
 
     cd openssl
 
-    CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-runixos --sysroot=$SYSROOT" \
+    CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT" \
     CFLAGS="-Wno-incompatible-pointer-types" \
     ./Configure linux-x86_64 \
         --prefix=/Core \

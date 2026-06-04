@@ -13,7 +13,7 @@ configure() {
     cmake ../curl -G Ninja \
         -DCMAKE_SYSTEM_NAME=RunixOS \
         -DCMAKE_C_COMPILER="$SYSROOT/Core/Bin/clang" \
-        -DCMAKE_C_FLAGS="--target=x86_64-rovelstars-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types" \
+        -DCMAKE_C_FLAGS="--target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types" \
         -DCMAKE_INSTALL_PREFIX=/Core \
         -DCMAKE_INSTALL_BINDIR=Bin \
         -DCMAKE_INSTALL_LIBDIR=LibKit \

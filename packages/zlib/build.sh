@@ -9,7 +9,7 @@ configure() {
 
     mkdir -p zlib-build && cd zlib-build
 
-    CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-runixos --sysroot=$SYSROOT" \
+    CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT" \
     CFLAGS="-Wno-incompatible-pointer-types" \
     ../zlib/configure \
         --prefix=/Core \
