@@ -32,7 +32,7 @@ configure() {
         --localstatedir=/Vault/State \
         --host=x86_64-rovelstars-linux-runixos \
         --build=$(gcc -dumpmachine) \
-        --with-headers=/Core/APIHeader \
+        --with-headers="$SYSROOT/Core/APIHeader" \
         --enable-shared \
         --enable-static \
         --disable-werror \
