@@ -1,0 +1,8 @@
+name = "llvm-runtimes"
+version = "23.0.0"
+description = "libunwind + libc++abi + libc++ for RunixOS (the C++ runtime)"
+licenses = ["Apache-2.0 WITH LLVM-exception"]
+repository = "https://github.com/renhiyama/llvm-project"
+branch = "runixos"
+local_path = "../../../llvm-project"
+dependencies = ["llvm", "compiler-rt", "glibc"]

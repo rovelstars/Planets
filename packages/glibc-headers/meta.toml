@@ -1,0 +1,8 @@
+name = "glibc-headers"
+version = "2.42"
+description = "Bootstrap glibc headers, so compiler-rt can build before full glibc"
+licenses = ["LGPL-2.1-or-later"]
+repository = "https://github.com/renhiyama/glibc"
+branch = "master"
+local_path = "../../../glibc"
+dependencies = ["llvm", "kernel-headers"]

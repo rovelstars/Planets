@@ -4,4 +4,4 @@ description = "GNU C Library - RovelStars fork with RunixOS support"
 licenses = ["GPL-2.0", "LGPL-2.1", "GCC RUNTIME LIBRARY EXCEPTION"]
 repository = "https://github.com/renhiyama/glibc"
 branch = "master"
-dependencies = ["llvm"]
+dependencies = ["llvm", "compiler-rt", "kernel-headers"]

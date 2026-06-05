@@ -1,0 +1,8 @@
+name = "compiler-rt"
+version = "23.0.0"
+description = "compiler-rt builtins + CRT for RunixOS (clang's runtime, into the resource dir)"
+licenses = ["Apache-2.0 WITH LLVM-exception"]
+repository = "https://github.com/renhiyama/llvm-project"
+branch = "runixos"
+local_path = "../../../llvm-project"
+dependencies = ["llvm", "glibc-headers", "kernel-headers"]

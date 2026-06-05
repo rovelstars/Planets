@@ -1,0 +1,6 @@
+name = "kernel-headers"
+version = "7.0.11"
+description = "Linux kernel UAPI headers for RunixOS (installed to Core/APIHeader)"
+licenses = ["GPL-2.0 WITH Linux-syscall-note"]
+repository = "https://cdn.kernel.org/pub/linux/kernel"
+dependencies = []
