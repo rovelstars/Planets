@@ -6,14 +6,12 @@ TARGET=x86_64-rovelstars-linux-runixos
 configure() {
     cd "$SRC"
     if [ -n "$LOCAL_SRC" ]; then
+        rm -rf nushell
         ln -sfn "$LOCAL_SRC" nushell
     elif [ ! -d "nushell" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-runixos}" --depth 1 nushell
     fi
     cd nushell
-    if [ "$CUSTOM_UNAME_O" = "true" ] && [ -f "$PATCHES/uname_o.diff" ]; then
-        patch -p0 < "$PATCHES/uname_o.diff" || true
-    fi
 }
 
 build() {

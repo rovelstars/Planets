@@ -4,4 +4,5 @@ description = "A post-modern text editor"
 licenses = ["MPL-2.0"]
 repository = "https://github.com/renhiyama/helix"
 branch = "runixos"
+local_path = "../../../helix"
 dependencies = ["rust"]

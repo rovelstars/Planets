@@ -7,6 +7,7 @@ TARGET=x86_64-rovelstars-linux-runixos
 configure() {
     cd "$SRC"
     if [ -n "$LOCAL_SRC" ]; then
+        rm -rf findutils
         ln -sfn "$LOCAL_SRC" findutils
     elif [ ! -d "findutils" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-main}" --depth 1 findutils

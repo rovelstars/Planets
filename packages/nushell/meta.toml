@@ -4,7 +4,5 @@ description = "A new type of shell - RunixOS fork"
 licenses = ["MIT"]
 repository = "https://github.com/renhiyama/nushell"
 branch = "runixos"
-
-# Remove the below line and the patch won't apply
-custom_uname_o = "true"
+local_path = "../../../nushell"
 dependencies = ["rust"]

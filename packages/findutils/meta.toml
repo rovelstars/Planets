@@ -4,4 +4,5 @@ description = "Rust implementation of findutils - RunixOS fork"
 licenses = ["MIT"]
 repository = "https://github.com/renhiyama/findutils"
 branch = "main"
+local_path = "../../../findutils"
 dependencies = ["rust"]

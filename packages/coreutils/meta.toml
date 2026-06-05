@@ -4,7 +4,5 @@ description = "Cross-platform Rust rewrite of the GNU coreutils - RunixOS fork"
 licenses = ["MIT"]
 repository = "https://github.com/renhiyama/coreutils"
 branch = "runixos"
-
-# Remove the below line and the patch won't apply
-custom_uname_o = "true"
+local_path = "../../../coreutils"
 dependencies = ["rust"]

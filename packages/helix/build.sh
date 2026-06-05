@@ -7,6 +7,7 @@ TARGET=x86_64-rovelstars-linux-runixos
 configure() {
     cd "$SRC"
     if [ -n "$LOCAL_SRC" ]; then
+        rm -rf helix
         ln -sfn "$LOCAL_SRC" helix
     elif [ ! -d "helix" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-runixos}" --depth 1 helix
