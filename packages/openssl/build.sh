@@ -42,4 +42,30 @@ install() {
     for pc in "$OUTPUT/Core/LibKit/pkgconfig"/*.pc; do
         [ -f "$pc" ] && sed -i 's|/include$|/APIHeader|; s|/include}|/APIHeader}|' "$pc"
     done
+
+    # Rename the shared libraries to RunixOS .rdl SONAMEs. OpenSSL's build
+    # hardcodes libssl.so.3/libcrypto.so.3, which collide with the host's
+    # libssl/libcrypto when a host build tool (e.g. cargo) has /Core/LibKit on
+    # its RUNPATH, causing it to load the RunixOS libs (and pull in libc.rdl.6)
+    # into a host process. .rdl makes the RunixOS libraries distinct, matching
+    # glibc/curl/nghttp2. Rewrite the SONAMEs, the libssl->libcrypto reference,
+    # every provider/engine module, the openssl app, and the dev symlinks.
+    local lk="$OUTPUT/Core/LibKit"
+    if [ -f "$lk/libcrypto.so.3" ]; then
+        patchelf --set-soname libcrypto.rdl.3 "$lk/libcrypto.so.3"
+        patchelf --set-soname libssl.rdl.3 "$lk/libssl.so.3"
+        patchelf --replace-needed libcrypto.so.3 libcrypto.rdl.3 "$lk/libssl.so.3"
+        for m in "$lk"/ossl-modules/*.so "$lk"/engines-3/*.so; do
+            [ -f "$m" ] && patchelf --replace-needed libcrypto.so.3 libcrypto.rdl.3 "$m"
+        done
+        if [ -f "$OUTPUT/Core/Bin/openssl" ]; then
+            patchelf --replace-needed libssl.so.3 libssl.rdl.3 "$OUTPUT/Core/Bin/openssl"
+            patchelf --replace-needed libcrypto.so.3 libcrypto.rdl.3 "$OUTPUT/Core/Bin/openssl"
+        fi
+        mv "$lk/libcrypto.so.3" "$lk/libcrypto.rdl.3"
+        mv "$lk/libssl.so.3" "$lk/libssl.rdl.3"
+        rm -f "$lk/libcrypto.so" "$lk/libssl.so"
+        ln -sf libcrypto.rdl.3 "$lk/libcrypto.rdl"
+        ln -sf libssl.rdl.3 "$lk/libssl.rdl"
+    fi
 }

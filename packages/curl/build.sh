@@ -21,12 +21,12 @@ configure() {
         -DCMAKE_PREFIX_PATH="$SYSROOT/Core" \
         -DCMAKE_FIND_ROOT_PATH="$SYSROOT/Core" \
         -DZLIB_INCLUDE_DIR="$SYSROOT/Core/APIHeader" \
-        -DZLIB_LIBRARY="$SYSROOT/Core/LibKit/libz.so" \
+        -DZLIB_LIBRARY="$SYSROOT/Core/LibKit/libz.rdl" \
         -DCURL_USE_OPENSSL=ON \
         -DOPENSSL_ROOT_DIR="$SYSROOT/Core" \
         -DOPENSSL_INCLUDE_DIR="$SYSROOT/Core/APIHeader" \
-        -DOPENSSL_CRYPTO_LIBRARY="$SYSROOT/Core/LibKit/libcrypto.so" \
-        -DOPENSSL_SSL_LIBRARY="$SYSROOT/Core/LibKit/libssl.so" \
+        -DOPENSSL_CRYPTO_LIBRARY="$SYSROOT/Core/LibKit/libcrypto.rdl" \
+        -DOPENSSL_SSL_LIBRARY="$SYSROOT/Core/LibKit/libssl.rdl" \
         -DUSE_NGHTTP2=ON \
         -DNGHTTP2_INCLUDE_DIR="$SYSROOT/Core/APIHeader" \
         -DNGHTTP2_LIBRARY="$SYSROOT/Core/LibKit/libnghttp2.rdl" \
