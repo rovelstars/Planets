@@ -50,4 +50,16 @@ build() {
 install() {
     cd "$SRC/build"
     ninja install
+
+    # CMAKE_SYSTEM_NAME=RunixOS makes compiler-rt insert an OS dir, so with the
+    # per-target layout the runtime lands at lib/runixos/<triple>/. clang looks
+    # in lib/<triple>/ (no OS dir), so flatten the runixos level up. Result:
+    # lib/x86_64-rovelstars-linux-runixos/libclang_rt.builtins.ral, which clang
+    # and -lclang_rt.builtins resolve.
+    ver="$("$SYSROOT/Core/Bin/clang" -dumpversion | cut -d. -f1)"
+    libdir="$OUTPUT/Core/LibKit/clang/$ver/lib"
+    if [ -d "$libdir/runixos" ]; then
+        cp -a "$libdir/runixos/." "$libdir/"
+        rm -rf "$libdir/runixos"
+    fi
 }
