@@ -62,4 +62,17 @@ install() {
         cp -a "$libdir/runixos/." "$libdir/"
         rm -rf "$libdir/runixos"
     fi
+
+    # gcc-style CRT names. glibc (and clang's --print-file-name) ask for
+    # crtbegin{,S,T}.o / crtend{,S}.o, but compiler-rt installs clang_rt.crt*.o.
+    # Provide the gcc names so the no-gcc RunixOS toolchain resolves them.
+    tdir="$libdir/x86_64-rovelstars-linux-runixos"
+    if [ -f "$tdir/clang_rt.crtbegin.o" ]; then
+        for n in crtbegin.o crtbeginS.o crtbeginT.o; do
+            cp -f "$tdir/clang_rt.crtbegin.o" "$tdir/$n"
+        done
+        for n in crtend.o crtendS.o; do
+            cp -f "$tdir/clang_rt.crtend.o" "$tdir/$n"
+        done
+    fi
 }
