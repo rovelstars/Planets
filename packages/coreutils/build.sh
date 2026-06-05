@@ -1,26 +1,17 @@
 #!/bin/bash
-# Build script for coreutils (Rust-based) (RunixOS)
-# Uses our fork with all RunixOS dependencies pre-patched.
+# Build script for coreutils (Rust uutils) (RunixOS), cross-built with the
+# sysroot Rust toolchain.
 
-TARGET_ARGS=""
-if [ -n "$RUNIXOS_TARGET" ]; then
-    TARGET_ARGS="--target $RUNIXOS_TARGET"
-    export RUSTC="$RUNIXOS_RUSTC"
-    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-linux-runixos --cfg getrandom_backend=\"linux_getrandom\""
-    export CC="$SYSROOT/Core/Bin/clang"
-    export CXX="$SYSROOT/Core/Bin/clang++"
-    export CFLAGS="--target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
-    export CFLAGS_x86_64_rovelstars_linux_runixos="--target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
-fi
+TARGET=x86_64-rovelstars-linux-runixos
 
 configure() {
     cd "$SRC"
-    if [ ! -d "coreutils" ]; then
+    if [ -n "$LOCAL_SRC" ]; then
+        ln -sfn "$LOCAL_SRC" coreutils
+    elif [ ! -d "coreutils" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-runixos}" --depth 1 coreutils
     fi
     cd coreutils
-
-    # Apply patches
     if [ "$CUSTOM_UNAME_O" = "true" ] && [ -f "$PATCHES/uname_o.diff" ]; then
         patch -p0 < "$PATCHES/uname_o.diff" || true
     fi
@@ -28,28 +19,18 @@ configure() {
 
 build() {
     cd "$SRC/coreutils"
-    if [ -z "$RUNIXOS_TARGET" ]; then
-        # Native build
-        # CFLAGS workaround: onig_sys bundles old oniguruma incompatible with GCC 15
-        CC=/usr/bin/cc CXX=/usr/bin/c++ \
-            CFLAGS="-Wno-incompatible-pointer-types" \
-            CFLAGS_x86_64_unknown_linux_gnu="-Wno-incompatible-pointer-types" \
-            cargo build --release --features unix -j"$JOBS"
-    else
-        # Cross-compilation for RunixOS
-        cargo build --release --features unix $TARGET_ARGS -j"$JOBS"
-    fi
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_LINKER="$SYSROOT/Core/Bin/clang"
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-C link-arg=--sysroot=$SYSROOT -C link-arg=-fuse-ld=lld --cfg getrandom_backend=\"linux_getrandom\""
+    export CC_x86_64_rovelstars_linux_runixos="$SYSROOT/Core/Bin/clang"
+    # onig_sys bundles an old oniguruma that trips newer C compilers.
+    export CFLAGS_x86_64_rovelstars_linux_runixos="--target=$TARGET --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
+    cargo build --release --features unix --target "$TARGET" -j"$JOBS"
 }
 
 install() {
     cd "$SRC/coreutils"
     mkdir -p "$OUTPUT/Core/Bin"
-    if [ -n "$RUNIXOS_TARGET" ]; then
-        cp target/$RUNIXOS_TARGET/release/coreutils "$OUTPUT/Core/Bin/"
-    else
-        cp target/release/coreutils "$OUTPUT/Core/Bin/"
-    fi
-    # Create symlinks for individual utilities
+    cp "target/$TARGET/release/coreutils" "$OUTPUT/Core/Bin/"
     cd "$OUTPUT/Core/Bin"
     for u in arch base32 base64 basename cat chgrp chmod chown chroot cksum \
              comm cp csplit cut date dd df dircolors dirname du echo env expand \

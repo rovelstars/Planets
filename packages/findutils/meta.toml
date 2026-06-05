@@ -4,4 +4,4 @@ description = "Rust implementation of findutils - RunixOS fork"
 licenses = ["MIT"]
 repository = "https://github.com/renhiyama/findutils"
 branch = "main"
-dependencies = ["glibc"]
+dependencies = ["rust"]

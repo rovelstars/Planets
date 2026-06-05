@@ -1,34 +1,30 @@
 #!/bin/bash
-# Build script for findutils (Rust) (RunixOS)
-# Uses our fork with all RunixOS dependencies pre-patched.
+# Build script for findutils (Rust) (RunixOS), cross-built with the sysroot Rust
+# toolchain.
 
-TARGET_ARGS=""
-if [ -n "$RUNIXOS_TARGET" ]; then
-    TARGET_ARGS="--target $RUNIXOS_TARGET"
-    export RUSTC="$RUNIXOS_RUSTC"
-    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-linux-runixos"
-fi
+TARGET=x86_64-rovelstars-linux-runixos
 
 configure() {
     cd "$SRC"
-    if [ ! -d "findutils" ]; then
+    if [ -n "$LOCAL_SRC" ]; then
+        ln -sfn "$LOCAL_SRC" findutils
+    elif [ ! -d "findutils" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-main}" --depth 1 findutils
     fi
 }
 
 build() {
     cd "$SRC/findutils"
-    cargo build --release $TARGET_ARGS -j"$JOBS"
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_LINKER="$SYSROOT/Core/Bin/clang"
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-C link-arg=--sysroot=$SYSROOT -C link-arg=-fuse-ld=lld"
+    export CC_x86_64_rovelstars_linux_runixos="$SYSROOT/Core/Bin/clang"
+    export CFLAGS_x86_64_rovelstars_linux_runixos="--target=$TARGET --sysroot=$SYSROOT"
+    cargo build --release --target "$TARGET" -j"$JOBS"
 }
 
 install() {
     cd "$SRC/findutils"
     mkdir -p "$OUTPUT/Core/Bin"
-    if [ -n "$RUNIXOS_TARGET" ]; then
-        cp target/$RUNIXOS_TARGET/release/find "$OUTPUT/Core/Bin/" 2>/dev/null
-        cp target/$RUNIXOS_TARGET/release/xargs "$OUTPUT/Core/Bin/" 2>/dev/null
-    else
-        cp target/release/find "$OUTPUT/Core/Bin/" 2>/dev/null
-        cp target/release/xargs "$OUTPUT/Core/Bin/" 2>/dev/null
-    fi
+    cp "target/$TARGET/release/find" "$OUTPUT/Core/Bin/" 2>/dev/null
+    cp "target/$TARGET/release/xargs" "$OUTPUT/Core/Bin/" 2>/dev/null
 }

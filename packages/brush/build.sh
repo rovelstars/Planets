@@ -1,42 +1,37 @@
 #!/bin/bash
-# Build script for brush shell (RunixOS)
-# Uses our fork with all RunixOS dependencies pre-patched.
+# Build script for the brush shell (RunixOS), cross-built with the sysroot Rust
+# toolchain (the rust package installs cargo + rustc + std into Core/Bin and the
+# rustlib for x86_64-rovelstars-linux-runixos).
 
-TARGET_ARGS=""
-if [ -n "$RUNIXOS_TARGET" ]; then
-    TARGET_ARGS="--target $RUNIXOS_TARGET"
-    export RUSTC="$RUNIXOS_RUSTC"
-    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-L $RUNIXOS_STD_DEPS -L $SYSROOT/Core/LibKit -C link-arg=-fuse-ld=lld -C link-arg=--sysroot=$SYSROOT -C link-arg=--target=x86_64-rovelstars-linux-runixos"
-fi
+TARGET=x86_64-rovelstars-linux-runixos
 
 configure() {
     cd "$SRC"
-    if [ ! -d "brush" ]; then
+    if [ -n "$LOCAL_SRC" ]; then
+        ln -sfn "$LOCAL_SRC" brush
+    elif [ ! -d "brush" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-runixos}" --depth 1 brush
     fi
     cd brush
-
-    # Apply patches
     if [ -d "$PATCHES" ]; then
         for p in "$PATCHES"/*.patch "$PATCHES"/*.diff; do
-            [ -f "$p" ] && git apply "$p" 2>/dev/null || patch -p1 < "$p" 2>/dev/null || true
+            [ -f "$p" ] && { git apply "$p" 2>/dev/null || patch -p1 < "$p" 2>/dev/null || true; }
         done
     fi
 }
 
 build() {
     cd "$SRC/brush"
-    cargo build --release $TARGET_ARGS -p brush-shell -j"$JOBS"
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_LINKER="$SYSROOT/Core/Bin/clang"
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-C link-arg=--sysroot=$SYSROOT -C link-arg=-fuse-ld=lld"
+    export CC_x86_64_rovelstars_linux_runixos="$SYSROOT/Core/Bin/clang"
+    export CFLAGS_x86_64_rovelstars_linux_runixos="--target=$TARGET --sysroot=$SYSROOT"
+    cargo build --release --target "$TARGET" -p brush-shell -j"$JOBS"
 }
 
 install() {
     cd "$SRC/brush"
     mkdir -p "$OUTPUT/Core/Bin"
-    if [ -n "$RUNIXOS_TARGET" ]; then
-        cp target/$RUNIXOS_TARGET/release/brush "$OUTPUT/Core/Bin/"
-    else
-        cp target/release/brush "$OUTPUT/Core/Bin/"
-    fi
-    # Create sh symlink for POSIX compatibility
+    cp "target/$TARGET/release/brush" "$OUTPUT/Core/Bin/"
     ln -sf brush "$OUTPUT/Core/Bin/sh"
 }

@@ -1,0 +1,8 @@
+name = "rust"
+version = "1.93.0"
+description = "Rust toolchain (rustc + cargo + std) targeting RunixOS"
+licenses = ["MIT OR Apache-2.0"]
+repository = "https://github.com/renhiyama/rust"
+branch = "master"
+local_path = "../../../rust"
+dependencies = ["llvm", "glibc", "llvm-runtimes"]
