@@ -8,6 +8,9 @@ TARGET=x86_64-rovelstars-linux-runixos
 configure() {
     cd "$SRC"
     if [ -n "$LOCAL_SRC" ]; then
+        # Drop any stale clone first; ln -sfn would otherwise create the symlink
+        # inside an existing brush/ directory rather than replacing it.
+        rm -rf brush
         ln -sfn "$LOCAL_SRC" brush
     elif [ ! -d "brush" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-runixos}" --depth 1 brush
