@@ -1,0 +1,8 @@
+name = "cmake"
+version = "4.3.0"
+description = "CMake build system - RovelStars fork with the RunixOS platform"
+licenses = ["BSD-3-Clause"]
+repository = "https://gitlab.kitware.com/renhiyama/cmake"
+branch = "master"
+local_path = "../../../cmake"
+dependencies = []

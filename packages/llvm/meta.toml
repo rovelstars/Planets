@@ -4,3 +4,4 @@ description = "The LLVM Project - RovelStars fork with RunixOS support"
 licenses = ["Apache License 2.0"]
 repository = "https://github.com/renhiyama/llvm-project"
 branch = "runixos"
+dependencies = ["cmake"]

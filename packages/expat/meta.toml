@@ -3,3 +3,4 @@ version = "2.7.1"
 description = "XML parser library"
 licenses = ["MIT"]
 repository = "https://github.com/libexpat/libexpat"
+dependencies = ["glibc"]

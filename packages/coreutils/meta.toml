@@ -7,3 +7,4 @@ branch = "runixos"
 
 # Remove the below line and the patch won't apply
 custom_uname_o = "true"
+dependencies = ["glibc"]
