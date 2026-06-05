@@ -4,9 +4,10 @@
 # CMake is a build-time tool: it runs on the build machine, not on RunixOS, so
 # it is built with the HOST toolchain, not the RunixOS cross-compiler Rocket
 # injects (same reason as the llvm package). The RunixOS value of this fork is
-# the Modules/Platform/RunixOS*.cmake files; -DRunixOS=1 turns on the Core/Bin +
-# Core/StoreRoom install layout and ships those modules, so the produced cmake
-# understands -DCMAKE_SYSTEM_NAME=RunixOS with no extra module path.
+# the Modules/Platform/RunixOS*.cmake files. -DRunixOS=1 selects the RunixOS FHS
+# layout and ships those modules; -DRunixOfficialBuild=ON puts it in the /Core
+# ring (the stock toolchain location the rest of the build expects), not the
+# default /Construct ring.
 
 configure() {
     export CC=/usr/bin/clang
@@ -29,6 +30,7 @@ configure() {
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="$OUTPUT" \
         -DRunixOS=1 \
+        -DRunixOfficialBuild=ON \
         -DBUILD_TESTING=OFF \
         -DBUILD_CursesDialog=OFF
 }
