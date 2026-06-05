@@ -28,6 +28,7 @@ configure() {
         -DCMAKE_C_FLAGS="--target=x86_64-rovelstars-linux-runixos -fuse-ld=lld" \
         -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
         -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
+        -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON \
         -DCOMPILER_RT_BUILD_BUILTINS=ON \
         -DCOMPILER_RT_BUILD_CRT=ON \
         -DCOMPILER_RT_BUILD_SANITIZERS=OFF \
