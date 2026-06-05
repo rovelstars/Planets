@@ -22,11 +22,18 @@ configure() {
     # Install into the sysroot FHS: rustc/cargo (host binaries) -> Core/Bin,
     # libraries + the target std (rustlib) -> Core/LibKit.
     cat > config.toml <<CFG
+change-id = "ignore"
 [build]
 host = ["x86_64-unknown-linux-gnu"]
 target = ["x86_64-unknown-linux-gnu", "x86_64-rovelstars-linux-runixos"]
 extended = true
 tools = ["cargo"]
+[llvm]
+# Build rust's pinned LLVM (currently 21) from its submodule. The CI download
+# 404s for our fork commit, and our own LLVM (23) is too new for rust 1.93's
+# llvm-wrapper. The compiler's LLVM version does not affect the ABI of the code
+# it emits, so this coexists fine with the clang toolchain's LLVM 23.
+download-ci-llvm = false
 [install]
 prefix = "$OUTPUT/Core"
 bindir = "Bin"
