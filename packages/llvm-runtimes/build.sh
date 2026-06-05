@@ -13,7 +13,10 @@ configure() {
     fi
 
     local T=x86_64-rovelstars-linux-runixos
-    "$SYSROOT/Core/Bin/cmake" ../llvm-project/runtimes -G Ninja -B build \
+    # cmake runs from $SRC (the symlink is $SRC/llvm-project), so the source path
+    # is relative to here, not ../ (unlike the llvm/compiler-rt packages which
+    # cd into build first).
+    "$SYSROOT/Core/Bin/cmake" llvm-project/runtimes -G Ninja -B build \
         -DCMAKE_SYSTEM_NAME=RunixOS \
         -DCMAKE_C_COMPILER="$SYSROOT/Core/Bin/clang" \
         -DCMAKE_CXX_COMPILER="$SYSROOT/Core/Bin/clang++" \
