@@ -18,6 +18,7 @@ configure() {
             [ -f "$p" ] && { git apply "$p" 2>/dev/null || patch -p1 < "$p" 2>/dev/null || true; }
         done
     fi
+    return 0
 }
 
 build() {
