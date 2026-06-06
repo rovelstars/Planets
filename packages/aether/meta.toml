@@ -1,0 +1,7 @@
+name = "aether"
+version = "0.1.0"
+description = "Aether - RunixOS network manager (links, DHCP, DNS)"
+licenses = ["MIT"]
+repository = "https://github.com/renhiyama/Aether"
+local_path = "../../../Aether"
+dependencies = ["rust"]
