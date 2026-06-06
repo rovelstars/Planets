@@ -116,7 +116,7 @@ OSR
     echo ">>> Copying userland from the built sysroot"
     # Everything is install-to-sysroot'd, so assemble userland straight from
     # $SYSROOT/Core/Bin (the fully built RunixOS) rather than per-package outputs.
-    for b in brush nu hx fastfetch userctl elevate git curl coreutils find xargs; do
+    for b in brush nu hx fastfetch userctl elevate oobe git curl coreutils find xargs; do
         if [ -e "$SYSROOT/Core/Bin/$b" ]; then
             cp -a "$SYSROOT/Core/Bin/$b" "$ROOT/Core/Bin/"
             echo "    $b"

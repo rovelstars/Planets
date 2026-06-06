@@ -19,7 +19,7 @@ build() {
     export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_LINKER="$SYSROOT/Core/Bin/clang"
     export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-C link-arg=--target=x86_64-rovelstars-linux-runixos -C link-arg=--sysroot=$SYSROOT -C link-arg=-fuse-ld=lld"
     export CC_x86_64_rovelstars_linux_runixos="$SYSROOT/Core/Bin/clang"
-    cargo build --release --target "$TARGET" -p userctl -p elevate -j"$JOBS"
+    cargo build --release --target "$TARGET" -p userctl -p elevate -p oobe -j"$JOBS"
 }
 
 install() {
@@ -27,6 +27,7 @@ install() {
     mkdir -p "$OUTPUT/Core/Bin"
     cp "target/$TARGET/release/userctl" "$OUTPUT/Core/Bin/"
     cp "target/$TARGET/release/elevate" "$OUTPUT/Core/Bin/"
+    cp "target/$TARGET/release/oobe" "$OUTPUT/Core/Bin/"
     # elevate must be setuid-root to drop from the caller to the target user.
     # Ownership is set to root at image assembly; the setuid bit is set here.
     chmod 4755 "$OUTPUT/Core/Bin/elevate"
