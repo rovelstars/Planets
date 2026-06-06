@@ -79,6 +79,13 @@ install() {
     # libc++ / libunwind
     cp -a "$SYSROOT/Core/LibKit"/libc++* "$ROOT/Core/LibKit/" 2>/dev/null
     cp -a "$SYSROOT/Core/LibKit"/libunwind* "$ROOT/Core/LibKit/" 2>/dev/null
+    # Third-party runtime shared libs that shipped binaries link against
+    # (git -> libz; curl/git-https -> libssl/libcrypto/libnghttp2; libcurl).
+    # Without these, installed binaries fail at load with "cannot open shared
+    # object file". Copy the runtime .rdl shared objects, not the static .ral.
+    for lib in libz libssl libcrypto libnghttp2 libcurl libexpat; do
+        cp -a "$SYSROOT/Core/LibKit/$lib".rdl* "$ROOT/Core/LibKit/" 2>/dev/null
+    done
     # compiler-rt
     cp -a "$SYSROOT/Core/LibKit/clang" "$ROOT/Core/LibKit/" 2>/dev/null
     # cmake modules
