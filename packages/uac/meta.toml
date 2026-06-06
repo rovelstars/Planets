@@ -1,0 +1,7 @@
+name = "uac"
+version = "0.1.0"
+description = "RunixOS User Account Control - userctl + elevate"
+licenses = ["MIT"]
+repository = "https://github.com/renhiyama/UAC"
+local_path = "../../../UAC"
+dependencies = ["rust"]
