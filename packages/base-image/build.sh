@@ -69,7 +69,7 @@ install() {
     # Dynamic linker
     cp -a "$SYSROOT/Core/LibKit"/ld-runixos-* "$ROOT/Core/LibKit/"
     # NSS module (UAC user/group resolution)
-    cp -a "$SYSROOT/Core/LibKit"/libnss_runix.so.2 "$ROOT/Core/LibKit/" 2>/dev/null
+    cp -a "$SYSROOT/Core/LibKit"/libnss_runix.rdl.2 "$ROOT/Core/LibKit/" 2>/dev/null
     # glibc static libs + crt objects
     cp -a "$SYSROOT/Core/LibKit"/libc.ral "$ROOT/Core/LibKit/" 2>/dev/null
     cp -a "$SYSROOT/Core/LibKit"/libc_nonshared.ral "$ROOT/Core/LibKit/" 2>/dev/null

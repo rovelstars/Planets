@@ -31,6 +31,6 @@ install() {
     # elevate must be setuid-root to drop from the caller to the target user.
     # Ownership is set to root at image assembly; the setuid bit is set here.
     chmod 4755 "$OUTPUT/Core/Bin/elevate"
-    # NSS module: glibc dlopens it as libnss_runix.so.2.
-    cp "target/$TARGET/release/libnss_runix.so" "$OUTPUT/Core/LibKit/libnss_runix.so.2"
+    # NSS module: our glibc fork dlopens libnss_runix.rdl.2 (RunixOS .rdl suffix).
+    cp "target/$TARGET/release/libnss_runix.rdl" "$OUTPUT/Core/LibKit/libnss_runix.rdl.2"
 }
