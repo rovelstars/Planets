@@ -32,6 +32,15 @@ install() {
     cd "$SRC/openssl"
     make install_sw install_ssldirs DESTDIR="$OUTPUT"
 
+    # OpenSSL has no --bindir option and installs apps to $prefix/bin (lowercase);
+    # move them to the RunixOS Core/Bin so the openssl/c_rehash tools land on PATH
+    # and get the .rdl patchelf rewrite below.
+    if [ -d "$OUTPUT/Core/bin" ]; then
+        mkdir -p "$OUTPUT/Core/Bin"
+        cp -a "$OUTPUT/Core/bin/." "$OUTPUT/Core/Bin/"
+        rm -rf "$OUTPUT/Core/bin"
+    fi
+
     # Move headers to the RunixOS Core/APIHeader convention and repoint the
     # pkg-config files so consumers resolve the include path correctly.
     if [ -d "$OUTPUT/Core/include" ]; then
