@@ -18,7 +18,7 @@ configure() {
 build() {
     cd "$SRC/coreutils"
     export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_LINKER="$SYSROOT/Core/Bin/clang"
-    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-C link-arg=--sysroot=$SYSROOT -C link-arg=-fuse-ld=lld --cfg getrandom_backend=\"linux_getrandom\""
+    export CARGO_TARGET_X86_64_ROVELSTARS_LINUX_RUNIXOS_RUSTFLAGS="-C link-arg=--target=x86_64-rovelstars-linux-runixos -C link-arg=--sysroot=$SYSROOT -C link-arg=-fuse-ld=lld --cfg getrandom_backend=\"linux_getrandom\""
     export CC_x86_64_rovelstars_linux_runixos="$SYSROOT/Core/Bin/clang"
     # onig_sys bundles an old oniguruma that trips newer C compilers.
     export CFLAGS_x86_64_rovelstars_linux_runixos="--target=$TARGET --sysroot=$SYSROOT -Wno-incompatible-pointer-types"
