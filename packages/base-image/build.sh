@@ -113,15 +113,33 @@ OSR
         cp "$SYSROOT/Core/LibKit/libc.rdl" "$ROOT/Core/LibKit/libc.rdl"
     fi
 
-    echo ">>> Copying userland utilities from Rocket output"
-    # ROCKET_OUTPUT is the host directory where Rocket stores per-package outputs
-    for pkg in brush findutils coreutils nushell fastfetch; do
-        pkg_bin="$ROCKET_OUTPUT/$pkg/Core/Bin"
-        if [ -d "$pkg_bin" ]; then
-            cp -a "$pkg_bin"/* "$ROOT/Core/Bin/" 2>/dev/null
-            echo "    $pkg installed"
+    echo ">>> Copying userland from the built sysroot"
+    # Everything is install-to-sysroot'd, so assemble userland straight from
+    # $SYSROOT/Core/Bin (the fully built RunixOS) rather than per-package outputs.
+    for b in brush nu hx fastfetch userctl elevate git curl coreutils find xargs; do
+        if [ -e "$SYSROOT/Core/Bin/$b" ]; then
+            cp -a "$SYSROOT/Core/Bin/$b" "$ROOT/Core/Bin/"
+            echo "    $b"
         fi
     done
+    # Applet + alias symlinks (sh->brush, ls/cp/... ->coreutils, find->findutils).
+    for l in "$SYSROOT/Core/Bin"/*; do
+        [ -L "$l" ] && cp -a "$l" "$ROOT/Core/Bin/" 2>/dev/null
+    done
+
+    echo ">>> Seeding accounts (UAC) + elevate setuid-root"
+    mkdir -p "$ROOT/Vault/Accounts" "$ROOT/Space"
+    # Seed root (uid 0). Human accounts are created at first-boot setup / by the
+    # admin. userctl from the sysroot writes into the new rootfs's store.
+    if [ -x "$SYSROOT/Core/Bin/userctl" ]; then
+        UAC_ROOT="$ROOT/Vault/Accounts" SPACE_ROOT="$ROOT/Space" \
+            "$SYSROOT/Core/Bin/userctl" create root --system --uid 0 --no-space --admin --no-password || true
+    fi
+    # elevate must be setuid-root to elevate.
+    if [ -f "$ROOT/Core/Bin/elevate" ]; then
+        chown 0:0 "$ROOT/Core/Bin/elevate" 2>/dev/null || true
+        chmod 4755 "$ROOT/Core/Bin/elevate"
+    fi
 
     echo ">>> Base image assembled at $ROOT"
     echo "    Directories: $(find "$ROOT" -type d | wc -l)"
