@@ -68,6 +68,8 @@ install() {
     cp -a "$SYSROOT/Core/LibKit"/libutil.rdl* "$ROOT/Core/LibKit/" 2>/dev/null
     # Dynamic linker
     cp -a "$SYSROOT/Core/LibKit"/ld-runixos-* "$ROOT/Core/LibKit/"
+    # NSS module (UAC user/group resolution)
+    cp -a "$SYSROOT/Core/LibKit"/libnss_runix.so.2 "$ROOT/Core/LibKit/" 2>/dev/null
     # glibc static libs + crt objects
     cp -a "$SYSROOT/Core/LibKit"/libc.ral "$ROOT/Core/LibKit/" 2>/dev/null
     cp -a "$SYSROOT/Core/LibKit"/libc_nonshared.ral "$ROOT/Core/LibKit/" 2>/dev/null
@@ -103,6 +105,16 @@ HOME_URL="https://rovelstars.com/"
 LOGO=RunixOS
 ANSI_COLOR="38;2;147;51;234"
 OSR
+
+    echo ">>> Writing nsswitch.conf (UAC via libnss_runix)"
+    # glibc reads this from /Core/Config/nsswitch.conf (forked _PATH_NSSWITCH_CONF).
+    # passwd/group resolve through the runix NSS module; auth never uses NSS shadow
+    # (the encrypted shadow is handled by UAC directly, not getspnam).
+    cat > "$ROOT/Core/Config/nsswitch.conf" <<'NSS'
+passwd: runix
+group: runix
+hosts: files dns
+NSS
 
     echo ">>> Copying cmake data"
     cp -a "$SYSROOT/Core/StoreRoom"/cmake-* "$ROOT/Core/StoreRoom/" 2>/dev/null
