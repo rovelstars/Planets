@@ -6,6 +6,7 @@ configure() {
     # $LOCAL_SRC (set by `rocket build glibc --local ../glibc`) builds the local
     # working tree instead of cloning upstream.
     if [ -n "$LOCAL_SRC" ]; then
+        rm -rf glibc
         ln -sfn "$LOCAL_SRC" glibc
     elif [ ! -d "glibc" ]; then
         git clone "$REPOSITORY" --branch "${BRANCH:-glibc-$VERSION}" --depth 1 glibc
