@@ -10,7 +10,10 @@ GIT_MAKE_ARGS=(
     LDFLAGS="-L$SYSROOT/Core/LibKit"
     prefix=/Core
     bindir=/Core/Bin
-    libexecdir=/Core/LibKit/git-core
+    # git uses its own gitexecdir (not libexecdir) for helper programs. libexec
+    # maps to /Core/LibKit in RunixOS (matches glibc --libexecdir=/Core/LibKit).
+    gitexecdir=/Core/LibKit/git-core
+    template_dir=/Core/StoreRoom/git-core/templates
     datarootdir=/Core/StoreRoom
     sysconfdir=/Core/Config
     NO_TCLTK=1
