@@ -88,6 +88,22 @@ install() {
     echo ">>> Copying config"
     cp -a "$SYSROOT/Core/Config"/* "$ROOT/Core/Config/" 2>/dev/null
 
+    echo ">>> Writing OSReleaseInfo"
+    # RunixOS release identity (os-release format). ID=runixos lets tools like
+    # fastfetch detect the OS and pick the RunixOS logo. Lives outside the FHS.
+    cat > "$ROOT/Core/Config/OSReleaseInfo" <<'OSR'
+NAME="RunixOS"
+PRETTY_NAME="RunixOS"
+ID=runixos
+ID_LIKE=linux
+VERSION="1.0"
+VERSION_ID="1.0"
+BUILD_ID="rolling"
+HOME_URL="https://rovelstars.com/"
+LOGO=RunixOS
+ANSI_COLOR="38;2;147;51;234"
+OSR
+
     echo ">>> Copying cmake data"
     cp -a "$SYSROOT/Core/StoreRoom"/cmake-* "$ROOT/Core/StoreRoom/" 2>/dev/null
 
@@ -99,7 +115,7 @@ install() {
 
     echo ">>> Copying userland utilities from Rocket output"
     # ROCKET_OUTPUT is the host directory where Rocket stores per-package outputs
-    for pkg in brush findutils coreutils nushell; do
+    for pkg in brush findutils coreutils nushell fastfetch; do
         pkg_bin="$ROCKET_OUTPUT/$pkg/Core/Bin"
         if [ -d "$pkg_bin" ]; then
             cp -a "$pkg_bin"/* "$ROOT/Core/Bin/" 2>/dev/null

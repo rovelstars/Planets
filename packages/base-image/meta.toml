@@ -5,4 +5,4 @@ licenses = ["MIT"]
 
 # This is a meta-package that assembles the base image from other packages.
 # It doesn't build from source - it copies pre-built outputs into a rootfs.
-dependencies = ["glibc", "llvm-runtimes", "coreutils", "findutils", "brush", "nushell", "curl", "git"]
+dependencies = ["glibc", "llvm-runtimes", "coreutils", "findutils", "brush", "nushell", "curl", "git", "fastfetch"]

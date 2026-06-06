@@ -55,17 +55,7 @@ build() {
 install() {
     cd "$SRC/fastfetch-build"
     DESTDIR="$OUTPUT" ninja install
-
-    # Install the RunixOS-branded logo and a default config that selects it.
-    mkdir -p "$OUTPUT/Core/StoreRoom/fastfetch" "$OUTPUT/Core/Config/fastfetch"
-    cp "$PATCHES/runixos-logo.txt" "$OUTPUT/Core/StoreRoom/fastfetch/runixos-logo.txt"
-    cat > "$OUTPUT/Core/Config/fastfetch/config.jsonc" <<'CFG'
-{
-    "logo": {
-        "type": "file-raw",
-        "source": "/Core/StoreRoom/fastfetch/runixos-logo.txt",
-        "padding": { "top": 1, "right": 3 }
-    }
-}
-CFG
+    # The RunixOS logo is built in (src/logo/ascii/r/runixos.txt) and is selected
+    # automatically when the OS id is runixos (from /Core/Config/OSReleaseInfo),
+    # so no logo file or config is shipped.
 }
