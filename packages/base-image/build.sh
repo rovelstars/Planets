@@ -147,6 +147,24 @@ NSS
         [ -L "$l" ] && cp -a "$l" "$ROOT/Core/Bin/" 2>/dev/null
     done
 
+    # git needs to exec its external helpers for network transport (builtins like
+    # clone/fetch are inside the main binary). Without git-remote-https, HTTPS
+    # clone fails: "remote-https is not a git command". Ship only the real
+    # external helpers (not the ~170 legacy builtin shims) plus the templates.
+    # NOTE: the git build installs every git-core program as a full copy (no
+    # hardlinks, ~780M); fixing that in the git package (INSTALL_HARDLINKS) would
+    # let us ship the whole dir cheaply. For now ship the minimal set.
+    mkdir -p "$ROOT/Core/libexec/git-core"
+    for h in git-remote-http git-remote-https git-http-fetch git-http-push git-http-backend; do
+        [ -f "$SYSROOT/Core/libexec/git-core/$h" ] &&
+            cp -a "$SYSROOT/Core/libexec/git-core/$h" "$ROOT/Core/libexec/git-core/"
+    done
+    if [ -d "$SYSROOT/Core/share/git-core" ]; then
+        mkdir -p "$ROOT/Core/share"
+        cp -a "$SYSROOT/Core/share/git-core" "$ROOT/Core/share/"
+    fi
+    echo "    git helpers: $(ls "$ROOT/Core/libexec/git-core" 2>/dev/null | wc -l)"
+
     # Rev (PID 1) is /Core/Bin/rev; the kernel cmdline boots init=/Core/Bin/rev.
     # Ship service definitions (.rsc) that packages installed into the sysroot.
     if [ -d "$SYSROOT/Core/Services" ]; then
