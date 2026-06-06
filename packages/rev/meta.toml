@@ -1,0 +1,7 @@
+name = "rev"
+version = "0.1.0"
+description = "Rev - RunixOS init system and service manager (PID 1)"
+licenses = ["MIT"]
+repository = "https://github.com/renhiyama/rev"
+local_path = "../../../rev"
+dependencies = ["rust"]

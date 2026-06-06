@@ -135,7 +135,8 @@ NSS
     echo ">>> Copying userland from the built sysroot"
     # Everything is install-to-sysroot'd, so assemble userland straight from
     # $SYSROOT/Core/Bin (the fully built RunixOS) rather than per-package outputs.
-    for b in brush nu hx fastfetch userctl elevate oobe git curl coreutils find xargs; do
+    for b in rev brush nu hx fastfetch userctl elevate oobe git curl coreutils find xargs \
+             aetherd aetherctl; do
         if [ -e "$SYSROOT/Core/Bin/$b" ]; then
             cp -a "$SYSROOT/Core/Bin/$b" "$ROOT/Core/Bin/"
             echo "    $b"
@@ -145,6 +146,14 @@ NSS
     for l in "$SYSROOT/Core/Bin"/*; do
         [ -L "$l" ] && cp -a "$l" "$ROOT/Core/Bin/" 2>/dev/null
     done
+
+    # Rev (PID 1) is /Core/Bin/rev; the kernel cmdline boots init=/Core/Bin/rev.
+    # Ship service definitions (.rsc) that packages installed into the sysroot.
+    if [ -d "$SYSROOT/Core/Services" ]; then
+        mkdir -p "$ROOT/Core/Services"
+        cp -a "$SYSROOT/Core/Services/." "$ROOT/Core/Services/" 2>/dev/null
+        echo "    services: $(ls "$ROOT/Core/Services" 2>/dev/null | wc -l)"
+    fi
 
     echo ">>> Seeding accounts (UAC) + elevate setuid-root"
     mkdir -p "$ROOT/Vault/Accounts" "$ROOT/Space"

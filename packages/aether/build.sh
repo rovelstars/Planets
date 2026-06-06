@@ -24,7 +24,14 @@ build() {
 
 install() {
     cd "$SRC/aether"
-    mkdir -p "$OUTPUT/Core/Bin"
+    mkdir -p "$OUTPUT/Core/Bin" "$OUTPUT/Core/Services"
     cp "target/$TARGET/release/aetherd" "$OUTPUT/Core/Bin/"
     cp "target/$TARGET/release/aetherctl" "$OUTPUT/Core/Bin/"
+    # Rev service: start aetherd at boot and keep it running.
+    cat > "$OUTPUT/Core/Services/rovelstars.aether.rsc" <<'RSC'
+name = "com.rovelstars.aether/daemon"
+description = "Aether network manager (wired/Wi-Fi/Bluetooth, DHCP, DNS)"
+exec-start = "/Core/Bin/aetherd"
+restart-policy = "always"
+RSC
 }
