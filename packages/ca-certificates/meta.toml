@@ -1,0 +1,5 @@
+name = "ca-certificates"
+version = "2026.06"
+description = "Common CA certificates bundle for TLS (RunixOS)"
+licenses = ["MPL-2.0"]
+dependencies = []

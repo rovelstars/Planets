@@ -23,6 +23,8 @@ configure() {
         -DZLIB_INCLUDE_DIR="$SYSROOT/Core/APIHeader" \
         -DZLIB_LIBRARY="$SYSROOT/Core/LibKit/libz.rdl" \
         -DCURL_USE_OPENSSL=ON \
+        -DCURL_CA_BUNDLE="/Core/Config/ssl/cert.pem" \
+        -DCURL_CA_PATH="/Core/Config/ssl/certs" \
         -DOPENSSL_ROOT_DIR="$SYSROOT/Core" \
         -DOPENSSL_INCLUDE_DIR="$SYSROOT/Core/APIHeader" \
         -DOPENSSL_CRYPTO_LIBRARY="$SYSROOT/Core/LibKit/libcrypto.rdl" \
