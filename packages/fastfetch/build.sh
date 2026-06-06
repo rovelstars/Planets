@@ -8,7 +8,10 @@ TARGET=x86_64-rovelstars-linux-runixos
 
 configure() {
     cd "$SRC"
-    if [ ! -d "fastfetch" ]; then
+    if [ -n "$LOCAL_SRC" ]; then
+        rm -rf fastfetch
+        ln -sfn "$LOCAL_SRC" fastfetch
+    elif [ ! -d "fastfetch" ]; then
         git clone "$REPOSITORY" --branch "$VERSION" --depth 1 fastfetch
     fi
 

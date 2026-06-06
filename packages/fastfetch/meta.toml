@@ -3,4 +3,5 @@ version = "2.64.2"
 description = "Fast system information tool, with a RunixOS-branded logo"
 licenses = ["MIT"]
 repository = "https://github.com/fastfetch-cli/fastfetch"
+local_path = "../../../fastfetch"
 dependencies = ["glibc"]
