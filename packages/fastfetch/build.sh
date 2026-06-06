@@ -15,10 +15,18 @@ configure() {
         git clone "$REPOSITORY" --branch "$VERSION" --depth 1 fastfetch
     fi
 
+    # Fresh cmake dir: CMAKE_SYSTEM_NAME is cached on first configure and sticks,
+    # so a stale cache would keep an old value.
+    rm -rf fastfetch-build
     mkdir -p fastfetch-build && cd fastfetch-build
 
+    # fastfetch's CMakeLists rejects unknown CMAKE_SYSTEM_NAME, so present as Linux
+    # (RunixOS is a Linux kernel; this enables fastfetch's /proc + /sys detection).
+    # Setting CMAKE_SYSTEM_NAME still puts cmake in cross mode; clang's --target
+    # makes the actual binary a RunixOS one.
     cmake ../fastfetch -G Ninja \
-        -DCMAKE_SYSTEM_NAME=RunixOS \
+        -DCMAKE_SYSTEM_NAME=Linux \
+        -DCMAKE_SYSTEM_PROCESSOR=x86_64 \
         -DCMAKE_C_COMPILER="$SYSROOT/Core/Bin/clang" \
         -DCMAKE_C_FLAGS="--target=$TARGET --sysroot=$SYSROOT" \
         -DCMAKE_EXE_LINKER_FLAGS="--target=$TARGET --sysroot=$SYSROOT" \
@@ -54,7 +62,7 @@ install() {
     cat > "$OUTPUT/Core/Config/fastfetch/config.jsonc" <<'CFG'
 {
     "logo": {
-        "type": "data",
+        "type": "file-raw",
         "source": "/Core/StoreRoom/fastfetch/runixos-logo.txt",
         "padding": { "top": 1, "right": 3 }
     }
