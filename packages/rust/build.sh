@@ -28,6 +28,9 @@ host = ["x86_64-unknown-linux-gnu"]
 target = ["x86_64-unknown-linux-gnu", "x86_64-rovelstars-linux-runixos"]
 extended = true
 tools = ["cargo"]
+# The sysroot toolchain does not need the rustc/cargo HTML doc set - it was the
+# only thing landing in the stock /Core/share/doc.
+docs = false
 [llvm]
 # Build rust's pinned LLVM (currently 21) from its submodule. The CI download
 # 404s for our fork commit, and our own LLVM (23) is too new for rust 1.93's
@@ -39,6 +42,10 @@ prefix = "$OUTPUT/Core"
 bindir = "Bin"
 libdir = "LibKit"
 sysconfdir = "Config"
+# Keep man/data/doc out of the stock share -> RunixOS StoreRoom layout.
+datadir = "StoreRoom"
+mandir = "StoreRoom/Manual"
+docdir = "StoreRoom/Docs"
 [rust]
 channel = "nightly"
 [target.x86_64-unknown-linux-gnu]
