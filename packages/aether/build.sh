@@ -3,6 +3,9 @@
 # sysroot Rust toolchain. libc-only, no C deps.
 
 TARGET=x86_64-rovelstars-linux-runixos
+# Keep cargo target in this per-sysroot build dir (not the symlinked, host-global
+# source fork), so a different sysroot rustc never reuses stale .rlibs.
+export CARGO_TARGET_DIR="$SRC/target"
 
 configure() {
     cd "$SRC"
@@ -25,8 +28,8 @@ build() {
 install() {
     cd "$SRC/aether"
     mkdir -p "$OUTPUT/Core/Bin" "$OUTPUT/Core/Services"
-    cp "target/$TARGET/release/aetherd" "$OUTPUT/Core/Bin/"
-    cp "target/$TARGET/release/aetherctl" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/aetherd" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/aetherctl" "$OUTPUT/Core/Bin/"
     # Rev service: start aetherd at boot and keep it running.
     cat > "$OUTPUT/Core/Services/rovelstars.aether.rsc" <<'RSC'
 name = "com.rovelstars.aether/daemon"

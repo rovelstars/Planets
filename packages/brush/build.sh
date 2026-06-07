@@ -4,6 +4,9 @@
 # rustlib for x86_64-rovelstars-linux-runixos).
 
 TARGET=x86_64-rovelstars-linux-runixos
+# Keep cargo target in this per-sysroot build dir (not the symlinked, host-global
+# source fork), so a different sysroot rustc never reuses stale .rlibs.
+export CARGO_TARGET_DIR="$SRC/target"
 
 configure() {
     cd "$SRC"
@@ -36,6 +39,6 @@ build() {
 install() {
     cd "$SRC/brush"
     mkdir -p "$OUTPUT/Core/Bin"
-    cp "target/$TARGET/release/brush" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/brush" "$OUTPUT/Core/Bin/"
     ln -sf brush "$OUTPUT/Core/Bin/sh"
 }

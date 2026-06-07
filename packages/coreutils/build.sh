@@ -3,6 +3,9 @@
 # sysroot Rust toolchain.
 
 TARGET=x86_64-rovelstars-linux-runixos
+# Keep cargo target in this per-sysroot build dir (not the symlinked, host-global
+# source fork), so a different sysroot rustc never reuses stale .rlibs.
+export CARGO_TARGET_DIR="$SRC/target"
 
 configure() {
     cd "$SRC"
@@ -28,7 +31,7 @@ build() {
 install() {
     cd "$SRC/coreutils"
     mkdir -p "$OUTPUT/Core/Bin"
-    cp "target/$TARGET/release/coreutils" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/coreutils" "$OUTPUT/Core/Bin/"
     cd "$OUTPUT/Core/Bin"
     for u in arch base32 base64 basename cat chgrp chmod chown chroot cksum \
              comm cp csplit cut date dd df dircolors dirname du echo env expand \

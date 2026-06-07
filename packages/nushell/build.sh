@@ -2,6 +2,9 @@
 # Build script for nushell (RunixOS), cross-built with the sysroot Rust toolchain.
 
 TARGET=x86_64-rovelstars-linux-runixos
+# Keep cargo target in this per-sysroot build dir (not the symlinked, host-global
+# source fork), so a different sysroot rustc never reuses stale .rlibs.
+export CARGO_TARGET_DIR="$SRC/target"
 
 configure() {
     cd "$SRC"
@@ -26,5 +29,5 @@ build() {
 install() {
     cd "$SRC/nushell"
     mkdir -p "$OUTPUT/Core/Bin"
-    cp "target/$TARGET/release/nu" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/nu" "$OUTPUT/Core/Bin/"
 }

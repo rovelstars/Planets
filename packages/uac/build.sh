@@ -3,6 +3,9 @@
 # toolchain. Pure-Rust crypto, so no C deps / cc-rs fork needed.
 
 TARGET=x86_64-rovelstars-linux-runixos
+# Keep cargo target in this per-sysroot build dir (not the symlinked, host-global
+# source fork), so a different sysroot rustc never reuses stale .rlibs.
+export CARGO_TARGET_DIR="$SRC/target"
 
 configure() {
     cd "$SRC"
@@ -25,12 +28,12 @@ build() {
 install() {
     cd "$SRC/uac"
     mkdir -p "$OUTPUT/Core/Bin" "$OUTPUT/Core/LibKit"
-    cp "target/$TARGET/release/userctl" "$OUTPUT/Core/Bin/"
-    cp "target/$TARGET/release/elevate" "$OUTPUT/Core/Bin/"
-    cp "target/$TARGET/release/oobe" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/userctl" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/elevate" "$OUTPUT/Core/Bin/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/oobe" "$OUTPUT/Core/Bin/"
     # elevate must be setuid-root to drop from the caller to the target user.
     # Ownership is set to root at image assembly; the setuid bit is set here.
     chmod 4755 "$OUTPUT/Core/Bin/elevate"
     # NSS module: our glibc fork dlopens libnss_runix.rdl.2 (RunixOS .rdl suffix).
-    cp "target/$TARGET/release/libnss_runix.rdl" "$OUTPUT/Core/LibKit/libnss_runix.rdl.2"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/libnss_runix.rdl" "$OUTPUT/Core/LibKit/libnss_runix.rdl.2"
 }

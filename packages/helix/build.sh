@@ -3,6 +3,9 @@
 # toolchain.
 
 TARGET=x86_64-rovelstars-linux-runixos
+# Keep cargo target in this per-sysroot build dir (not the symlinked, host-global
+# source fork), so a different sysroot rustc never reuses stale .rlibs.
+export CARGO_TARGET_DIR="$SRC/target"
 
 configure() {
     cd "$SRC"
@@ -29,6 +32,6 @@ install() {
     local bin_dir="$OUTPUT/Core/Bin"
     local runtime_dir="$OUTPUT/Core/StoreRoom/helix/runtime"
     mkdir -p "$bin_dir" "$runtime_dir"
-    cp "target/$TARGET/release/hx" "$bin_dir/"
+    cp "$CARGO_TARGET_DIR/$TARGET/release/hx" "$bin_dir/"
     cp -r runtime/* "$runtime_dir/"
 }

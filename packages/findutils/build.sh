@@ -3,6 +3,9 @@
 # toolchain.
 
 TARGET=x86_64-rovelstars-linux-runixos
+# Keep cargo target in this per-sysroot build dir (not the symlinked, host-global
+# source fork), so a different sysroot rustc never reuses stale .rlibs.
+export CARGO_TARGET_DIR="$SRC/target"
 
 configure() {
     cd "$SRC"
@@ -26,6 +29,6 @@ build() {
 install() {
     cd "$SRC/findutils"
     mkdir -p "$OUTPUT/Core/Bin"
-    cp "target/$TARGET/release/find" "$OUTPUT/Core/Bin/" 2>/dev/null
-    cp "target/$TARGET/release/xargs" "$OUTPUT/Core/Bin/" 2>/dev/null
+    cp "$CARGO_TARGET_DIR/$TARGET/release/find" "$OUTPUT/Core/Bin/" 2>/dev/null
+    cp "$CARGO_TARGET_DIR/$TARGET/release/xargs" "$OUTPUT/Core/Bin/" 2>/dev/null
 }
