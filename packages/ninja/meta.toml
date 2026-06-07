@@ -1,0 +1,6 @@
+name = "ninja"
+version = "1.12.1"
+description = "Ninja - small fast build system (RunixOS native build environment)"
+licenses = ["Apache-2.0"]
+repository = "https://github.com/ninja-build/ninja"
+dependencies = ["glibc", "llvm-runtimes"]
