@@ -1,0 +1,12 @@
+name = "llvm-native"
+version = "23.0.0"
+description = "LLVM/Clang/LLD built to RUN on RunixOS (native, self-hosting toolchain)"
+licenses = ["Apache License 2.0"]
+repository = "https://github.com/renhiyama/llvm-project"
+branch = "runixos"
+# Same fork as the host `llvm` package and compiler-rt; build the local working
+# tree so porting fixes apply without pushing.
+local_path = "../../../llvm-project"
+# Needs the cross toolchain + the target C++ runtime/builtins already in the
+# sysroot to link clang/lld against.
+dependencies = ["llvm", "llvm-runtimes", "compiler-rt", "zlib"]
