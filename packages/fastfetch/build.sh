@@ -31,9 +31,6 @@ configure() {
         -DCMAKE_C_FLAGS="--target=$TARGET --sysroot=$SYSROOT" \
         -DCMAKE_EXE_LINKER_FLAGS="--target=$TARGET --sysroot=$SYSROOT" \
         -DCMAKE_INSTALL_PREFIX=/Core \
-        -DCMAKE_INSTALL_BINDIR=Bin \
-        -DCMAKE_INSTALL_DATAROOTDIR=StoreRoom \
-        -DCMAKE_INSTALL_MANDIR=StoreRoom/Manual \
         -DCMAKE_PREFIX_PATH="$SYSROOT/Core" \
         -DCMAKE_FIND_ROOT_PATH="$SYSROOT/Core" \
         -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
