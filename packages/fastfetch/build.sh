@@ -20,18 +20,20 @@ configure() {
     rm -rf fastfetch-build
     mkdir -p fastfetch-build && cd fastfetch-build
 
-    # fastfetch's CMakeLists rejects unknown CMAKE_SYSTEM_NAME, so present as Linux
-    # (RunixOS is a Linux kernel; this enables fastfetch's /proc + /sys detection).
-    # Setting CMAKE_SYSTEM_NAME still puts cmake in cross mode; clang's --target
-    # makes the actual binary a RunixOS one.
+    # Use the RunixOS cmake platform so installs land in the RunixOS layout
+    # (StoreRoom/LibKit, never stock share/libexec). The fork's CMakeLists now
+    # treats RunixOS as a Linux kernel for its /proc + /sys detection.
+    # RunixOfficialBuild=ON selects the Core ring (fastfetch ships in the base).
     cmake ../fastfetch -G Ninja \
-        -DCMAKE_SYSTEM_NAME=Linux \
+        -DCMAKE_SYSTEM_NAME=RunixOS \
         -DCMAKE_SYSTEM_PROCESSOR=x86_64 \
         -DCMAKE_C_COMPILER="$SYSROOT/Core/Bin/clang" \
         -DCMAKE_C_FLAGS="--target=$TARGET --sysroot=$SYSROOT" \
         -DCMAKE_EXE_LINKER_FLAGS="--target=$TARGET --sysroot=$SYSROOT" \
         -DCMAKE_INSTALL_PREFIX=/Core \
         -DCMAKE_INSTALL_BINDIR=Bin \
+        -DCMAKE_INSTALL_DATAROOTDIR=StoreRoom \
+        -DCMAKE_INSTALL_MANDIR=StoreRoom/Manual \
         -DCMAKE_PREFIX_PATH="$SYSROOT/Core" \
         -DCMAKE_FIND_ROOT_PATH="$SYSROOT/Core" \
         -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
