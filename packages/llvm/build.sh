@@ -49,4 +49,10 @@ build() {
 install() {
     cd "$SRC/build"
     ninja install
+    # clang's build emits host-triple compiler-rt builtins into a stock
+    # $prefix/lib/clang (outside the RunixOS layout). RunixOS clang cross-builds
+    # to the rovelstars triple and uses the compiler-rt package's builtins in
+    # Core/LibKit/clang, so these host builtins are unused - drop them so the
+    # sysroot has no stray /lib.
+    rm -rf "$OUTPUT/lib"
 }
