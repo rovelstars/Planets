@@ -1,0 +1,6 @@
+name = "gzip"
+version = "1.13"
+description = "GNU gzip (RunixOS native build environment)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/gzip"
+dependencies = ["glibc"]

@@ -1,0 +1,6 @@
+name = "patch"
+version = "2.7.6"
+description = "GNU patch (RunixOS native build environment)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/patch"
+dependencies = ["glibc"]

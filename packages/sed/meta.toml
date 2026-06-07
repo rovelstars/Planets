@@ -1,0 +1,6 @@
+name = "sed"
+version = "4.9"
+description = "GNU sed (RunixOS native build environment)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/sed"
+dependencies = ["glibc"]

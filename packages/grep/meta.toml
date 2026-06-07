@@ -1,0 +1,6 @@
+name = "grep"
+version = "3.11"
+description = "GNU grep (RunixOS native build environment)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/grep"
+dependencies = ["glibc"]

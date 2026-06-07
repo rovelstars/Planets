@@ -1,0 +1,6 @@
+name = "diffutils"
+version = "3.10"
+description = "GNU diffutils (RunixOS native build environment)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/diffutils"
+dependencies = ["glibc"]

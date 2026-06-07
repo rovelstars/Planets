@@ -1,0 +1,6 @@
+name = "xz"
+version = "5.4.7"
+description = "XZ Utils - LZMA compression (RunixOS native build environment)"
+licenses = ["0BSD", "LGPL-2.1-or-later", "GPL-2.0-or-later"]
+repository = "https://github.com/tukaani-project/xz"
+dependencies = ["glibc"]

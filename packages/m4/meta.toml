@@ -1,0 +1,6 @@
+name = "m4"
+version = "1.4.19"
+description = "GNU m4 (RunixOS native build environment)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/m4"
+dependencies = ["glibc"]
