@@ -26,10 +26,14 @@ configure() {
         -DCMAKE_INSTALL_PREFIX="$OUTPUT" \
         -DCMAKE_INSTALL_LIBDIR=Core/LibKit \
         -DCMAKE_INSTALL_INCLUDEDIR=Core/APIHeader \
+        -DCMAKE_INSTALL_DATADIR=Core/StoreRoom \
         -DLIBUNWIND_INSTALL_LIBRARY_DIR=Core/LibKit \
         -DLIBCXXABI_INSTALL_LIBRARY_DIR=Core/LibKit \
+        -DLIBCXX_INSTALL_LIBRARY_DIR=Core/LibKit \
         -DLIBUNWIND_INSTALL_INCLUDE_DIR=Core/APIHeader \
         -DLIBCXXABI_INSTALL_INCLUDE_DIR=Core/APIHeader \
+        -DLIBCXX_INSTALL_INCLUDE_DIR=Core/APIHeader/c++/v1 \
+        -DLIBCXX_INSTALL_INCLUDE_TARGET_DIR=Core/APIHeader/c++/v1 \
         -DCMAKE_C_FLAGS="--target=$T -fuse-ld=lld -nostartfiles --rtlib=compiler-rt" \
         -DCMAKE_CXX_FLAGS="--target=$T -fuse-ld=lld -nostartfiles --rtlib=compiler-rt --unwindlib=none" \
         -DCMAKE_EXE_LINKER_FLAGS="-L$SYSROOT/Core/LibKit $SYSROOT/Core/LibKit/crt1.o $SYSROOT/Core/LibKit/crti.o $SYSROOT/Core/LibKit/crtn.o -lc" \

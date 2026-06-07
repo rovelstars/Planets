@@ -36,5 +36,8 @@ build() {
 
 install() {
     cd "$SRC/zlib-build"
-    make install DESTDIR="$OUTPUT"
+    # zlib's configure has no --mandir; its Makefile defaults man3 to
+    # $prefix/share/man. Override so the man page lands in the RunixOS layout
+    # (StoreRoom) instead of a stock /Core/share.
+    make install DESTDIR="$OUTPUT" mandir=/Core/StoreRoom/Manual
 }
