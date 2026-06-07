@@ -1,0 +1,6 @@
+name = "make"
+version = "4.4.1"
+description = "GNU Make - build automation tool (RunixOS native build environment)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftpmirror.gnu.org/make"
+dependencies = ["glibc"]
