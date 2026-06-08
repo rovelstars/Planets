@@ -38,7 +38,7 @@ configure() {
         --sysconfdir=/Core/Config \
         --localstatedir=/Vault/State \
         --host=x86_64-rovelstars-linux-runixos \
-        --build=$(gcc -dumpmachine) \
+        --build=x86_64-pc-linux-gnu \
         --with-headers="$SYSROOT/Core/APIHeader" \
         --enable-shared \
         --enable-static \

@@ -1,0 +1,6 @@
+name = "bison"
+version = "3.8.2"
+description = "GNU Bison parser generator (build-time dep for glibc)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/bison"
+dependencies = ["glibc", "m4"]

@@ -24,7 +24,10 @@ install() {
     cd "$SRC/linux"
     # headers_install drops the tree under <path>/include; the RunixOS layout
     # wants linux/, asm/, asm-generic/ etc directly under Core/APIHeader.
-    make ARCH=x86 INSTALL_HDR_PATH="$OUTPUT/Core/APIHeader" headers_install
+    # HOSTCC=clang: headers_install builds the tiny fixdep host helper; default
+    # cc/gcc is absent in a self-hosted build. RunixOS is all-LLVM, so clang.
+    make ARCH=x86 HOSTCC="$SYSROOT/Core/Bin/clang" \
+        INSTALL_HDR_PATH="$OUTPUT/Core/APIHeader" headers_install
     if [ -d "$OUTPUT/Core/APIHeader/include" ]; then
         cp -a "$OUTPUT/Core/APIHeader/include/." "$OUTPUT/Core/APIHeader/"
         rm -rf "$OUTPUT/Core/APIHeader/include"

@@ -1,0 +1,6 @@
+name = "rsync"
+version = "3.4.1"
+description = "rsync (build-time dep: kernel headers_install)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://download.samba.org/pub/rsync/src"
+dependencies = ["glibc", "zlib"]
