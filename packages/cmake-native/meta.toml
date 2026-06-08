@@ -1,0 +1,9 @@
+name = "cmake-native"
+version = "4.3.0"
+description = "CMake built to RUN on RunixOS (native, self-hosting build tool)"
+licenses = ["BSD-3-Clause"]
+repository = "https://gitlab.kitware.com/renhiyama/cmake"
+branch = "master"
+# Same RovelStars cmake fork as the host `cmake` package; build the local tree.
+local_path = "../../../cmake"
+dependencies = ["glibc", "llvm-runtimes"]
