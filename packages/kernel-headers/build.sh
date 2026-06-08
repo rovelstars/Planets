@@ -22,14 +22,14 @@ build() {
 
 install() {
     cd "$SRC/linux"
-    # headers_install drops the tree under <path>/include; the RunixOS layout
-    # wants linux/, asm/, asm-generic/ etc directly under Core/APIHeader.
-    # HOSTCC=clang: headers_install builds the tiny fixdep host helper; default
-    # cc/gcc is absent in a self-hosted build. RunixOS is all-LLVM, so clang.
-    make ARCH=x86 HOSTCC="$SYSROOT/Core/Bin/clang" \
-        INSTALL_HDR_PATH="$OUTPUT/Core/APIHeader" headers_install
-    if [ -d "$OUTPUT/Core/APIHeader/include" ]; then
-        cp -a "$OUTPUT/Core/APIHeader/include/." "$OUTPUT/Core/APIHeader/"
-        rm -rf "$OUTPUT/Core/APIHeader/include"
-    fi
+    # Use 'make headers' (generates the unifdef'd UAPI tree in usr/include) then
+    # cp, instead of 'headers_install' which finishes with an rsync the native
+    # rsync segfaults on in-chroot. HOSTCC=clang: the headers step builds the tiny
+    # fixdep/unifdef host helpers; default cc/gcc is absent self-hosted (all-LLVM).
+    make ARCH=x86 HOSTCC="$SYSROOT/Core/Bin/clang" headers
+    mkdir -p "$OUTPUT/Core/APIHeader"
+    # usr/include holds linux/, asm/, asm-generic/ etc - the RunixOS layout wants
+    # them directly under Core/APIHeader. Copy only headers (drop .install stamps).
+    cp -a usr/include/. "$OUTPUT/Core/APIHeader/"
+    find "$OUTPUT/Core/APIHeader" -name '.*.cmd' -o -name '.install' -delete 2>/dev/null || true
 }
