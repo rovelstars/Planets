@@ -1,0 +1,6 @@
+name = "bash"
+version = "5.2.37"
+description = "GNU Bash - the /bin/sh for the RunixOS build environment"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://ftp.gnu.org/gnu/bash"
+dependencies = ["glibc"]
