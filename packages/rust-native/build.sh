@@ -58,6 +58,13 @@ CFG
 build() {
     export PATH=/Core/Bin:/usr/bin:/bin
     unset LD_LIBRARY_PATH
+    # cargo (built for the runixos host) links openssl via openssl-sys. Point it
+    # at the sysroot openssl and link STATICALLY (libssl.a/libcrypto.a exist),
+    # sidestepping the .rdl-vs-.so soname mismatch. Target-scoped env so the host
+    # build tools (x86_64-unknown-linux-gnu) still use the host openssl.
+    export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_LIB_DIR=/Core/LibKit
+    export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_INCLUDE_DIR=/Core/APIHeader
+    export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_STATIC=1
     cd "$SRC/rust"
     python3 x.py build --stage 2
 }
@@ -65,6 +72,9 @@ build() {
 install() {
     export PATH=/Core/Bin:/usr/bin:/bin
     unset LD_LIBRARY_PATH
+    export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_LIB_DIR=/Core/LibKit
+    export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_INCLUDE_DIR=/Core/APIHeader
+    export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_STATIC=1
     cd "$SRC/rust"
     python3 x.py install
 }
