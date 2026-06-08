@@ -1,0 +1,6 @@
+name = "patchelf"
+version = "0.18.0"
+description = "patchelf - modify ELF interpreter/soname/rpath (RunixOS build tool)"
+licenses = ["GPL-3.0-or-later"]
+repository = "https://github.com/NixOS/patchelf"
+dependencies = ["glibc", "llvm-runtimes"]

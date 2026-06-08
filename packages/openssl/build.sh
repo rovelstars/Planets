@@ -16,7 +16,7 @@ configure() {
     # Core/APIHeader in install().
     CC="$SYSROOT/Core/Bin/clang --target=x86_64-rovelstars-linux-runixos --sysroot=$SYSROOT" \
     CFLAGS="-Wno-incompatible-pointer-types" \
-    ./Configure linux-x86_64 \
+    perl ./Configure linux-x86_64 \
         --prefix=/Core \
         --libdir=LibKit \
         --openssldir=/Core/Config/ssl \
