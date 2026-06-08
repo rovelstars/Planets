@@ -1,0 +1,10 @@
+name = "llvm21"
+version = "21.1.0"
+description = "LLVM 21 codegen libs (native), the external LLVM rust links against"
+licenses = ["Apache License 2.0"]
+# Build LLVM 21 from rust's pinned submodule so the version matches exactly what
+# rustc_llvm expects. Built with OUR clean recipe (not rust's bundled cmake) to
+# avoid the bundled-build issues; installed to a contained /Core/llvm21 prefix so
+# it does not clash with the LLVM-23 toolchain (llvm-native).
+local_path = "../../../rust/src/llvm-project"
+dependencies = ["llvm", "glibc", "llvm-runtimes", "zlib"]

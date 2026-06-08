@@ -64,6 +64,10 @@ channel = "nightly"
 cc = "/usr/bin/cc"
 cxx = "/usr/bin/c++"
 [target.x86_64-rovelstars-linux-runixos]
+# Link the external native LLVM 21 (llvm21 package) instead of building rust's
+# bundled LLVM - sidesteps the bundled-build issues entirely. llvm-config is a
+# runixos ELF that runs in the chroot.
+llvm-config = "/Core/llvm21/bin/llvm-config"
 cc = "$SRC/ccwrap"
 cxx = "$SRC/cxxwrap"
 linker = "$SYSROOT/Core/Bin/clang"
