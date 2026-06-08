@@ -1,0 +1,6 @@
+name = "dash"
+version = "0.5.12"
+description = "DASH - lean POSIX shell, the /bin/sh for the RunixOS build environment"
+licenses = ["BSD-3-Clause", "GPL-2.0-or-later"]
+repository = "http://gondor.apana.org.au/~herbert/dash/files"
+dependencies = ["glibc"]
