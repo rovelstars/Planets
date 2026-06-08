@@ -28,6 +28,7 @@ configure() {
         --bindir=/Core/Bin \
         --libdir=/Core/LibKit \
         --includedir=/Core/APIHeader \
+        --with-platlibdir=LibKit \
         --enable-shared \
         --with-ensurepip=no \
         --without-static-libpython \
