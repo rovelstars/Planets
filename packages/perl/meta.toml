@@ -1,0 +1,6 @@
+name = "perl"
+version = "5.40.0"
+description = "Perl 5 (RunixOS native; build-time dep for glibc/openssl)"
+licenses = ["Artistic-1.0-Perl", "GPL-1.0-or-later"]
+repository = "https://www.cpan.org/src/5.0"
+dependencies = ["glibc"]
