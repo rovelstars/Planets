@@ -50,6 +50,10 @@ tools = ["cargo"]
 docs = false
 [llvm]
 download-ci-llvm = false
+# NOTE: not setting use-libcxx here - it is global and would force the HOST
+# stage rustc to link libc++ too (the host has no libc++). Instead llvm21's
+# llvm-config --cxxflags carries -stdlib=libc++, so rustc_llvm auto-links libc++
+# for the runixos target only; the host LLVM stays on libstdc++.
 [install]
 prefix = "$OUTPUT/Core"
 bindir = "Bin"
@@ -87,7 +91,10 @@ build() {
     export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_INCLUDE_DIR=/Core/APIHeader
     export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_STATIC=1
     cd "$SRC/rust"
-    python3 x.py build --stage 2
+    # Build only rustc + std + cargo (skip rustdoc and other tools). rustdoc's
+    # librustdoc fails to compile in this tree (unrelated PatKind import issue)
+    # and is not needed to build RunixOS packages.
+    python3 x.py build --stage 2 compiler library src/tools/cargo
 }
 
 install() {
@@ -97,5 +104,6 @@ install() {
     export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_INCLUDE_DIR=/Core/APIHeader
     export X86_64_ROVELSTARS_LINUX_RUNIXOS_OPENSSL_STATIC=1
     cd "$SRC/rust"
-    python3 x.py install
+    # install uses component names (not build paths): rustc + std + cargo.
+    python3 x.py install --stage 2 compiler/rustc library/std cargo
 }
