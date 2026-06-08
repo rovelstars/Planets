@@ -5,4 +5,4 @@ licenses = ["MIT OR Apache-2.0"]
 repository = "https://github.com/renhiyama/rust"
 branch = "master"
 local_path = "../../../rust"
-dependencies = ["llvm", "glibc", "llvm-runtimes", "zlib"]
+dependencies = ["llvm", "glibc", "llvm-runtimes", "zlib", "llvm21", "python"]
