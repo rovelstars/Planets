@@ -1,0 +1,6 @@
+name = "python"
+version = "3.13.1"
+description = "CPython 3 (RunixOS native; build-time dep for llvm/glibc)"
+licenses = ["PSF-2.0"]
+repository = "https://www.python.org/ftp/python"
+dependencies = ["glibc", "zlib", "openssl", "xz"]
