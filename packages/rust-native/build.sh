@@ -22,6 +22,23 @@ configure() {
     fi
 
     cd rust
+
+    # rust's bundled-LLVM build injects `-isystem /usr/include` (host C headers)
+    # into our clang invocation, which precedes the sysroot libc++/C headers and
+    # breaks libc++'s #include_next ordering (<cmath>/<cstdlib>/<cerrno> errors).
+    # Wrap cc/cxx to prepend the sysroot include dirs so they win over /usr/include
+    # (and force --sysroot=/). C++ gets libc++'s c++/v1 first; C does NOT (libc++
+    # ships <stdio.h>-style wrappers that would hijack a C compile).
+    cat > "$SRC/ccwrap" <<'WRAP'
+#!/bin/sh
+exec /Core/Bin/clang --sysroot=/ -isystem /Core/APIHeader "$@"
+WRAP
+    cat > "$SRC/cxxwrap" <<'WRAP'
+#!/bin/sh
+exec /Core/Bin/clang++ --sysroot=/ -isystem /Core/APIHeader/c++/v1 -isystem /Core/APIHeader "$@"
+WRAP
+    chmod +x "$SRC/ccwrap" "$SRC/cxxwrap"
+
     cat > config.toml <<CFG
 change-id = "ignore"
 [build]
@@ -47,8 +64,8 @@ channel = "nightly"
 cc = "/usr/bin/cc"
 cxx = "/usr/bin/c++"
 [target.x86_64-rovelstars-linux-runixos]
-cc = "$SYSROOT/Core/Bin/clang"
-cxx = "$SYSROOT/Core/Bin/clang++"
+cc = "$SRC/ccwrap"
+cxx = "$SRC/cxxwrap"
 linker = "$SYSROOT/Core/Bin/clang"
 ar = "$SYSROOT/Core/Bin/llvm-ar"
 ranlib = "$SYSROOT/Core/Bin/llvm-ranlib"
