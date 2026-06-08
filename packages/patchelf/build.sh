@@ -5,8 +5,8 @@
 configure() {
     cd "$SRC"
     if [ ! -d "patchelf-$VERSION" ]; then
-        curl -L "$REPOSITORY/releases/download/$VERSION/patchelf-$VERSION.tar.bz2" -o patchelf.tar.bz2
-        tar --no-same-owner -xf patchelf.tar.bz2
+        curl -L "$REPOSITORY/releases/download/$VERSION/patchelf-$VERSION.tar.gz" -o patchelf.tar.gz
+        tar --no-same-owner -xf patchelf.tar.gz
     fi
     cd "patchelf-$VERSION"
 
