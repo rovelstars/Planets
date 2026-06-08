@@ -19,7 +19,8 @@ install() {
         /etc/ssl/certs/ca-certificates.crt \
         /etc/pki/tls/certs/ca-bundle.crt \
         /etc/ca-certificates/extracted/tls-ca-bundle.pem \
-        /etc/ssl/cert.pem; do
+        /etc/ssl/cert.pem \
+        /Core/Config/ssl/cert.pem; do
         if [ -f "$src" ]; then
             cp "$src" "$OUTPUT/Core/Config/ssl/cert.pem"
             found="$src"

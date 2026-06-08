@@ -31,6 +31,7 @@ configure() {
         -Dlocincpth=/Core/APIHeader \
         -Dloclibpth=/Core/LibKit \
         -Dglibpth=/Core/LibKit \
+        -Dso=rdl \
         -Dlibswanted="pthread dl m c util" \
         -Duseshrplib \
         -Dprefix=/Core \
