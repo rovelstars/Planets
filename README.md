@@ -113,3 +113,31 @@ Follow the structure above. Prefer linking the upstream git repository in
 
 **Note:** By contributing you agree to license your contributions under the same
 license as the project (Apache License 2.0).
+
+## Pros
+
+- Recipes build **all of RunixOS from the toolchain up** -- LLVM, glibc/kernel
+  headers, the build environment, and the full userspace.
+- **Self-hosting**: almost every planet rebuilds on RunixOS itself with zero
+  foreign tools, via Rocket's `--self-hosted` mode.
+- Tiny, transparent recipes (`meta.toml` + `build.sh`); easy to read, patch, and
+  audit; copyleft handled explicitly with bundled license files.
+
+## Cons / tradeoffs
+
+- Curated, **RunixOS-only** set -- third-party planets are manual and not part of
+  the official build.
+- Shell recipes (same tradeoff as Rocket): powerful but can hide
+  non-reproducible or host-leaking steps.
+- Source-built: no prebuilt binary packages, so a full build is heavy.
+
+## Known issues / limitations
+
+- **Self-host bootstrap not 100%.** The 2-stage bootstrap proves the toolchain +
+  build environment, but a handful of core packages still have gaps building
+  fully under self-host (tracked); cross-bootstrap from a host covers the rest.
+- Some packages are oversized without tuning (e.g. git installs every `git-core`
+  program as a full copy, ~780M, until `INSTALL_HARDLINKS` is applied).
+- No version pinning/lockfile across planets; upstream drift can break a recipe.
+- A few `*-native` toolchain recipes are newer and less battle-tested than the
+  host-bootstrap ones.
