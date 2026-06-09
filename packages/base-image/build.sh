@@ -115,6 +115,10 @@ BUILD_ID="rolling"
 HOME_URL="https://rovelstars.com/"
 LOGO=RunixOS
 ANSI_COLOR="38;2;147;51;234"
+# Product edition: standard | server | enterprise | container. Drives OOBE
+# behaviour (oobe reads this). Server/enterprise/container images override it;
+# default is standard (the free, non-commercial desktop edition).
+RUNIX_EDITION=standard
 OSR
 
     echo ">>> Writing nsswitch.conf (UAC via libnss_runix)"
